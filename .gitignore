@@ -1,3 +1,4 @@
 nbproject
 configs/app.ini
-assets/*
+assets/config
+assets/*.mp3
