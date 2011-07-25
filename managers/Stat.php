@@ -4,6 +4,8 @@ namespace Manager;
 class Stat extends \Lib\Base\Manager {
     
     public function log( $artist ) {
+        $artist = $this->pdo->query($artist);
+        
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
         $q = "SELECT * FROM stat WHERE artist = '{$artist}' AND ip = {$ip}";
@@ -20,6 +22,8 @@ class Stat extends \Lib\Base\Manager {
     }
     
     public function getRecommendations( $artist ) {
+        $artist = $this->pdo->query($artist);
+        
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
         $q = "SELECT * FROM stat WHERE artist = '{$artist}'";

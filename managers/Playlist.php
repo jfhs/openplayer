@@ -8,7 +8,9 @@ class Playlist extends \Lib\Base\Manager {
             return array();
         }
         
-        $q = "SELECT * FROM pl WHERE userId = {$user->id}";
+        $userId = intval($user->id);
+        
+        $q = "SELECT * FROM pl WHERE userId = {$userId}";
         $res = $this->pdo->query( $q );
 
         if ( !$res ) {
@@ -19,8 +21,12 @@ class Playlist extends \Lib\Base\Manager {
     }
 
     public function getSongs( $plId ) {
+        $plId = intval($plId);
+        
         $user = User::getUser();
-        $q = "SELECT * FROM pl INNER JOIN pl_song pls ON pl.id = pls.plId WHERE pl.userId = {$user->id} AND pl.id = {$plId} ORDER BY pls.position";
+        $userId = intval($user->id);
+        
+        $q = "SELECT * FROM pl INNER JOIN pl_song pls ON pl.id = pls.plId WHERE pl.userId = {$userId} AND pl.id = {$plId} ORDER BY pls.position";
 
         $res = $this->pdo->query( $q );
 
@@ -29,17 +35,23 @@ class Playlist extends \Lib\Base\Manager {
 
     public function addPL( $name ) {
         $user = User::getUser();
+        $userId = intval($user->id);
+        $name = $this->pdo->quote($name);
 
-        $q = "INSERT INTO pl VALUES (null, {$user->id},'{$name}')";
+        $q = "INSERT INTO pl VALUES (null, {$userId}, {$name})";
         $res = $this->pdo->exec( $q );
 
         return $this->pdo->lastInsertId();
     }
 
     private function checkIfMine( $id ) {
-        // xss protection
+        $id = intval($id);
+        
         $user = User::getUser();
-        $q = "SELECT * FROM pl WHERE id = {$id} AND userId = {$user->id}";
+        $userId = intval($user->id);
+        
+        
+        $q = "SELECT * FROM pl WHERE id = {$id} AND userId = {$userId}";
         $res = $this->pdo->query( $q );
         
         if ( $res->fetchObject() ) {
@@ -62,9 +74,13 @@ class Playlist extends \Lib\Base\Manager {
     }
 
     public function editPL( $id, $name ) {
+        $plId = intval($plId);
+        $name = $this->pdo->quote($name);
+        
         $user = User::getUser();
-
-        $q = "UPDATE pl SET name = '{$name}' WHERE id = {$id} AND userId = {$user->id}";
+        $userId = intval($user->id);
+        
+        $q = "UPDATE pl SET name = {$name} WHERE id = {$id} AND userId = {$userId}";
         return $this->pdo->exec( $q );
     }
 
@@ -76,21 +92,32 @@ class Playlist extends \Lib\Base\Manager {
         $pos = $this->getSongPosition( $id, $plId );
         $this->downPositions( $pos, $plId );
         
-        $q = "DELETE FROM pl_song WHERE plId = {$plId} AND songId = '{$id}'";
+        $id = $this->pdo->quote($id);
+        $plId = intval($plId);
+        
+        $q = "DELETE FROM pl_song WHERE plId = {$plId} AND songId = {$id}";
         return $this->pdo->exec( $q );
     }
     
     private function downPositions( $afterPosition, $plId ) {
+        $plId = intval($plId);
+        
         $q = "UPDATE pl_song SET position = position - 1 WHERE plId = {$plId} AND position > {$afterPosition}";
         $this->pdo->exec( $q );
     }
     
     private function upPositions( $afterPosition, $plId ) {
+        $plId = intval($plId);
+        
         $q = "UPDATE pl_song SET position = position + 1 WHERE plId = {$plId} AND position > {$afterPosition}";
         $this->pdo->exec( $q );
     }
 
     public function moveSongToPL( $fromId, $toId, $afterId, $songData ) {
+        $fromId = intval($fromId);
+        $toId = intval($toId);
+        $afterId = $this->pdo->quote($afterId);
+        
         if ( !$this->checkIfMine( $toId ) || ($fromId && !$this->checkIfMine( $fromId )) ) {
             return false;
         }
@@ -110,15 +137,17 @@ class Playlist extends \Lib\Base\Manager {
         $this->upPositions( $newPosition-1, $toId );
         # /positioning
 
-        if ( !$fromId && !$isExits ) {
+        if ( !$fromId ) {
             $songInfo = serialize( $songData );
+            $songInfo = $this->pdo->quote($songInfo);
             
-            $q = "INSERT INTO pl_song VALUES (null, '{$songData['id']}', $toId, '{$songInfo}', {$newPosition})";
+            $q = "INSERT INTO pl_song VALUES (null, '{$songData['id']}', $toId, {$songInfo}, {$newPosition})";
             $status = $this->pdo->exec( $q );
-        } elseif( $isExits && ($fromId != $toId) ) {
+        } elseif( false && ($fromId != $toId) ) { //@todo
             $this->delSongFromPL( $songData['id'], $fromId );
         } else{
-            $q = "UPDATE pl_song SET plId = {$toId}, position = {$newPosition} WHERE songId='{$songData['id']}' AND plId = {$fromId}";
+            $songId = $this->pdo->quote($songData['id']);
+            $q = "UPDATE pl_song SET plId = {$toId}, position={$newPosition} WHERE songId={$songId} AND plId={$fromId}";
             $status = $this->pdo->exec( $q );
         }
         
@@ -126,7 +155,10 @@ class Playlist extends \Lib\Base\Manager {
     }
     
     private function getSongPosition( $songId, $plId ) {
-        $q = "SELECT * FROM pl_song WHERE songId = '{$songId}' AND plId = $plId";
+        $songId = $this->pdo->quote($songId);
+        $plId = intval($plId);
+        
+        $q = "SELECT * FROM pl_song WHERE songId = {$songId} AND plId = $plId";
         $res = $this->pdo->query( $q );
         
         if (!$res) return 0;
@@ -135,7 +167,9 @@ class Playlist extends \Lib\Base\Manager {
     }
     
     public function updateSongInfo( $id, $songInfo ) {
-        $q = "SELECT * FROM pl_song WHERE songId = '{$id}'";
+        $id = $this->pdo->quote($id);
+        
+        $q = "SELECT * FROM pl_song WHERE songId = {$id}";
         $res = $this->pdo->query($q);
         
         foreach ( $res->fetchAll( \PDO::FETCH_OBJ ) as $song) {
@@ -145,8 +179,9 @@ class Playlist extends \Lib\Base\Manager {
             );
             
             $songInfo = serialize($songInfo);
+            $songInfo = $this->pdo->quote($songInfo);
             
-            $q = "UPDATE pl_song SET songInfo '{$songInfo}' WHERE songId = '{$id}'";
+            $q = "UPDATE pl_song SET songInfo = {$songInfo} WHERE songId = '{$id}'";
             $this->pdo->exec($q);
         }
         

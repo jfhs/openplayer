@@ -13,7 +13,11 @@ class User extends \Lib\Base\Manager {
     }
     
     public function updatePLSettings ( $plId, $status ) {
+        $plId = intval($plId);
+        
         $user = User::getUser();
+        $userId = intval($user->id);
+
         $settings = $user->settings;
         
         $settings['pl'][$plId] = $status;
@@ -21,8 +25,9 @@ class User extends \Lib\Base\Manager {
         $_SESSION[ 'op' ][ User::SESS_KEY ]->settings = $settings;
         
         $serializedSettings = json_encode($settings);
+        $serializedSettings = $this->pdo->quote($serializedSettings);
         
-        $q = "UPDATE user SET settings = '{$serializedSettings}' WHERE id = {$user->id}";
+        $q = "UPDATE user SET settings = {$serializedSettings} WHERE id = {$userId}";
         return $this->pdo->exec($q);
     }
 
@@ -37,26 +42,25 @@ class User extends \Lib\Base\Manager {
         return (boolean) self::getUser();
     }
     
-//    public function getRole() {
-//        return self::getUserOption( 'role' );
-//    }
 //    
     public function login ( $login, $password = null ) {
+        $loginQ = $this->pdo->quote($login);
+        if ($password) $passwordMd5 = $this->pdo->quote(md5($password));
+        
         if ( !$login ) return false;
         
-        $q = "SELECT * FROM user WHERE login = '{$login}'";
+        $q = "SELECT * FROM user WHERE login = {$loginQ}";
         
         if ( $password ) {
-            $q .= " AND password = '" . md5($password) . "'";
+            $q .= " AND password = {$passwordMd5} ";
         } else {
             $q .= " AND password IS NULL";
         }
-        
         $res = $this->pdo->query($q);
         $user = $res->fetchObject();
         
-        if ( ! $user ) {
-            $q = "INSERT INTO user VALUES (null, '{$login}', ". ( $password ? "'".md5($password)."'" : "null" ) . ", null, null)";
+        if ( !$user ) {
+            $q = "INSERT INTO user VALUES (null, {$loginQ}, ". ( $password ? $passwordMd5 : "null" ) . ", null, null)";
             $res = $this->pdo->exec($q);
             
             if ($res) {
@@ -65,8 +69,6 @@ class User extends \Lib\Base\Manager {
                 return false;
             }
         }
-        
-        
         
         return $this->store($user);
     }
@@ -83,11 +85,13 @@ class User extends \Lib\Base\Manager {
     }
     
     private function generateSessionKey( $user ) {
+        $userId = intval($user->id);
+        
         $key = md5( microtime(true) . $user->id . 'secret' );
         
         setcookie('sessionKey', $key, time()+(60*60*60*24*14) , '/');
         
-        $q = "UPDATE user SET sessionKey = '{$key}' WHERE id = {$user->id}";
+        $q = "UPDATE user SET sessionKey = '{$key}' WHERE id = {$userId}";
         $this->pdo->exec($q);
     }
 
@@ -99,7 +103,9 @@ class User extends \Lib\Base\Manager {
     
     public function autologin() {
         if ( !User::isLoggedIn() && isset($_COOKIE[ 'sessionKey' ]) ) {
-            $q = "SELECT * FROM user WHERE sessionKey = '{$_COOKIE[ 'sessionKey' ]}'";
+            $sessionKey = $this->pdo->query($_COOKIE[ 'sessionKey' ]);
+            
+            $q = "SELECT * FROM user WHERE sessionKey = '{$sessionKey}'";
             $res = $this->pdo->query($q);
             
             $user = $res->fetchObject();
