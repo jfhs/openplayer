@@ -1,0 +1,13 @@
+<? if ( Manager\User::isLoggedIn() ): ?>
+    
+    Ты авторизирован как <b><?= Manager\User::getUserOption('login') ?></b> &bull;
+    <a href="javascript:" id="opLinkLogout" class="op-underline">Выйти</a>
+    
+<? else: ?>
+    
+    <?php require ROOT . '/views/partials/auth.phtml' ?>
+    <a href="javascript:" id="opLinkLogin" class="op-underline">Авторизироваться</a>
+    
+<? endif ?>
+
+<script src="web/js/User.js" type="text/javascript"></script>

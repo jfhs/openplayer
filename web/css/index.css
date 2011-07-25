@@ -1,0 +1,90 @@
+.op .op-table th {
+    text-align: left;
+}
+
+.op-hide {
+    display: none;
+}
+
+.op {
+    font-family: Verdana, Arial, Helvetica;
+    font-size: 12px;
+}
+
+.op .ui-dialog {
+    font-size: 10px;
+}
+
+.op-w100 {
+    width: 100%;
+}
+
+.op-fl {
+    float: left;
+}
+
+.op-fr {
+    float: right;
+}
+
+.op-clear {
+    clear: both;
+}
+
+
+.op-icons {
+    background-image: url("../img/icons.png");
+    background-repeat: no-repeat;
+    width: 16px;
+    text-decoration: none;
+    outline: none;
+}
+
+.op-icon-open {
+    background-position: 0px -39px;
+}
+
+.op-icon-closed {
+    background-position: 0px -52px;
+}
+
+.op-icon-pl-del {
+    background-position: 0px -23px;
+}
+
+.op-icon-pl-edit {
+    background-position: 0px -1px;
+}
+
+.op-icon-song-play {
+    background-position: 0px -70px; /* -112 */
+    padding-left: 15px;
+}
+
+.op-icon-song-del {
+    display: inline-block;
+    background-position: 0px -87px;
+}
+
+.op-icon-twitter {
+    display: inline-block;
+    background-position: 0px -132px;
+}
+
+.op-icon-vk {
+    display: inline-block;
+    background-position: 0px -150px;
+}
+.op-icon-facebook {
+    display: inline-block;
+    background-position: 0px -169px;
+}
+.op-icon-link {
+    display: inline-block;
+    background-position: 0px -188px;
+}
+
+.op-icon-new {
+    padding-left: 15px;
+    background-position: 0px -205px;
+}

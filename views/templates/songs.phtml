@@ -1,0 +1,22 @@
+<?php echo $this->render('recommendation') ?>
+
+<? if ( !count($this->songs) ): ?>
+    Ничего не найдено.
+<? else: ?>
+    
+    <div class="op-container-songbox op-container-songs" id="opContainerSongs">
+        <?php foreach ($this->songs as $song): ?>
+            <?php $path = $song['url'] ?>
+            <?php $plId = 0 ?>
+
+            <? require ROOT . '/views/partials/song.phtml' ?>
+        <?php endforeach ?>
+    </div>
+
+    <?php if (! \Lib\Request::get('l') ): ?> 
+        <?php if (\Lib\Request::get('offset')): ?> 
+            <a id="opPagerSongsPrev" href="?q=<?= \Lib\Request::get('q') ?>&offset=<?= (\Lib\Request::get('offset') - \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">&leftarrow; Предыдущие</a>
+        <?php endif ?>
+        <a id="opPagerSongsNext" href="?q=<?= \Lib\Request::get('q') ?>&offset=<?= (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Следующие &rightarrow;</a>
+    <?php endif ?>
+<? endif ?>

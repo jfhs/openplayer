@@ -1,0 +1,40 @@
+<?php echo $this->render('player') ?>
+
+<div class="op-placeholder-little">
+    
+</div>
+
+<img src="./web/img/logo.png" style="display: inline-block"/>
+
+<a href="http://twitter.com/openwebplayer" title="Новости проекта" target="_new" rel="nofollow" class="op-twitter-btn">
+    <img src="./web/img/twitter.png" style="display: inline-block"/>
+</a>
+
+<span class="op-loading op-hide" id="opLoading">
+    <img src="./web/img/loading.gif"/> загрузка...
+</span>
+
+<div id="opContainerUser">
+    <?php echo $this->render('user') ?>
+</div>
+
+<div class="op-container-main">
+    <div style="width: 100%">
+        <?php echo $this->render('search') ?>
+    </div>
+    <div id="opSongsPlace">
+        <?php if (\Lib\Request::get('l')): ?>
+            <?php echo $this->render('songs') ?>
+        <?php elseif (\Lib\Request::get('q')): ?>
+            <?php echo $this->render('songs') ?>
+        <?php else: ?>
+            <?php echo $this->render('about') ?>
+        <?php endif ?>
+    </div>
+    
+    <script type="text/javascript" src="./web/js/Search.js"></script>
+</div>
+
+<div id="opContainerPlaylists">
+    <?php echo $this->render('playlists') ?>
+</div>

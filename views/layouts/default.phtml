@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?php echo \Lib\Config::getInstance()->getOption('app', 'title') ?></title>
+        
+        <base href="<?php echo \Lib\Config::getInstance()->getOption('app', 'baseUrl') ?>"/>
+        
+        <meta charset="<?php echo \Lib\Config::getInstance()->getOption('app', 'charset') ?>"/>
+        
+        <script type="text/javascript" src="./web/js/jquery.js"></script>
+        <script type="text/javascript" src="./web/js/jquery-ui.js"></script>
+        
+        <script type="text/javascript" src="./web/js/Loading.js"></script>
+        <script type="text/javascript" src="./web/js/Playlists.js"></script>
+        
+        <script type="text/javascript" src="./web/lib/jwplayer/jwplayer.js"></script>  
+        
+        <link href="./web/css/index.css" rel="stylesheet" media="all" />
+        <link href="./web/css/design.css" rel="stylesheet" media="all" />
+        <link href="./web/css/jquery-ui.custom.css" rel="stylesheet" media="all" />
+        
+        <link rel="icon" type="image/png" href="./web/img/icon.png" />
+    </head>
+    
+    <body class="op">
+        <script type="text/javascript">
+            if ( location.hash.match(/#!/) ) {
+                location.href = location.hash.replace("#!", "");
+            }
+        </script>
+        
+        <?php echo $this->content ?>
+    </body>
+</html>

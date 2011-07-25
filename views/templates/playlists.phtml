@@ -1,0 +1,41 @@
+<?php if ($this->user): ?>
+    <?php $playlistManager = new \Manager\Playlist ?>
+
+    <div class="op-container-playlists">
+        <? foreach ($this->playlists as $pl): ?>
+            <div data-id="<?= $pl->id ?>" class="op-playlist">
+                <div class="op-playlist-header">
+                    <div class="op-playlist-header-in">
+                        <a href="javascript:" 
+                           class="op-icons op-link-pl-openhide op-fl <? if (isset($this->user->settings['pl'][$pl->id]) && 'true' == $this->user->settings['pl'][$pl->id]): ?>op-icon-open<? else: ?>op-icon-closed<? endif ?>" 
+                           data-id="<?= $pl->id ?>">&nbsp;</a>
+
+                        <span id="opLinkPlaylistName<?= $pl->id ?>">
+                            <?= $pl->name ?>
+                        </span>
+
+                        <a href="javascript:" data-id="<?= $pl->id ?>" class="op-icons op-icon-pl-del op-fr op-link-pl-del">&nbsp;</a>
+                        <a href="javascript:" data-id="<?= $pl->id ?>" class="op-icons op-icon-pl-edit op-fr op-link-pl-edit">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div id="opLinkPlaylistSongs<?= $pl->id ?>" class="op-container-songbox <? if ( isset($this->user->settings['pl'][$pl->id]) && 'true' == $this->user->settings['pl'][$pl->id]): ?>op-hide<? endif ?>">
+                    <? foreach ($playlistManager->getSongs($pl->id) as $plSong): ?> 
+                        <? $song = unserialize($plSong->songInfo) ?>
+
+                        <? $plId = $pl->id ?>
+                        <? $position = $plSong->position ?>
+
+                        <? require ROOT . '/views/partials/song.phtml'; ?>
+                    <? endforeach ?>
+                </div>
+            </div>
+        <? endforeach ?>
+
+        <a href="javascript:" id="opLinkNewPlaylist" class="op-icons op-icon-new">Новый плейлист</a>
+    </div>
+<?php endif ?>
+
+<script type="text/javascript">
+    Playlists.init();
+</script>
