@@ -76,6 +76,10 @@ class Playlist extends \Lib\Base\Manager {
     }
 
     public function editPL( $id, $name ) {
+        if ( !$this->checkIfMine( $id ) ) {
+            return false;
+        }
+        
         $id = intval($id);
         $name = strip_tags($name);
         $name = $this->pdo->quote($name);
