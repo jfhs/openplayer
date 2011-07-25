@@ -14,6 +14,7 @@ class User extends \Lib\Base\Manager {
     
     public function updatePLSettings ( $plId, $status ) {
         $plId = intval($plId);
+        $status = 1*$status;
         
         $user = User::getUser();
         $userId = intval($user->id);
@@ -44,8 +45,13 @@ class User extends \Lib\Base\Manager {
     
 //    
     public function login ( $login, $password = null ) {
+        $login = strip_tags($login);
+        
         $loginQ = $this->pdo->quote($login);
-        if ($password) $passwordMd5 = $this->pdo->quote(md5($password));
+        if ($password) {
+            $password = strip_tags($password);
+            $passwordMd5 = $this->pdo->quote(md5($password));
+        }
         
         if ( !$login ) return false;
         

@@ -4,6 +4,7 @@ namespace Manager;
 class Stat extends \Lib\Base\Manager {
     
     public function log( $artist ) {
+        $artist = strip_tags($artist);
         $artist = $this->pdo->query($artist);
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
@@ -22,6 +23,7 @@ class Stat extends \Lib\Base\Manager {
     }
     
     public function getRecommendations( $artist ) {
+        $artist = strip_tags($artist);
         $artist = $this->pdo->query($artist);
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);

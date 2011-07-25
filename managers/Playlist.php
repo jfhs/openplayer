@@ -34,6 +34,7 @@ class Playlist extends \Lib\Base\Manager {
     }
 
     public function addPL( $name ) {
+        $name = strip_tags($name);
         $user = User::getUser();
         $userId = intval($user->id);
         $name = $this->pdo->quote($name);
@@ -65,6 +66,7 @@ class Playlist extends \Lib\Base\Manager {
         if ( !$this->checkIfMine( $id ) ) {
             return false;
         }
+        $id = intval($id);
         
         $q = "DELETE FROM pl_song WHERE plId = {$id}";
         $this->pdo->exec( $q );
@@ -74,7 +76,8 @@ class Playlist extends \Lib\Base\Manager {
     }
 
     public function editPL( $id, $name ) {
-        $plId = intval($plId);
+        $id = intval($id);
+        $name = strip_tags($name);
         $name = $this->pdo->quote($name);
         
         $user = User::getUser();
@@ -117,7 +120,7 @@ class Playlist extends \Lib\Base\Manager {
         $fromId = intval($fromId);
         $toId = intval($toId);
         $afterId = $this->pdo->quote($afterId);
-        
+
         if ( !$this->checkIfMine( $toId ) || ($fromId && !$this->checkIfMine( $fromId )) ) {
             return false;
         }
@@ -140,6 +143,7 @@ class Playlist extends \Lib\Base\Manager {
         if ( !$fromId ) {
             $songInfo = serialize( $songData );
             $songInfo = $this->pdo->quote($songInfo);
+            $songInfo = strip_tags($songInfo);
             
             $q = "INSERT INTO pl_song VALUES (null, '{$songData['id']}', $toId, {$songInfo}, {$newPosition})";
             $status = $this->pdo->exec( $q );
@@ -155,7 +159,6 @@ class Playlist extends \Lib\Base\Manager {
     }
     
     private function getSongPosition( $songId, $plId ) {
-        $songId = $this->pdo->quote($songId);
         $plId = intval($plId);
         
         $q = "SELECT * FROM pl_song WHERE songId = {$songId} AND plId = $plId";
@@ -180,6 +183,7 @@ class Playlist extends \Lib\Base\Manager {
             
             $songInfo = serialize($songInfo);
             $songInfo = $this->pdo->quote($songInfo);
+//            $songInfo = strip_tags($songInfo);
             
             $q = "UPDATE pl_song SET songInfo = {$songInfo} WHERE songId = '{$id}'";
             $this->pdo->exec($q);
