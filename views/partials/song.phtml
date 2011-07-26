@@ -1,11 +1,11 @@
 <div class="op-song" 
-     data-id="<?= $song['id'] ?>" 
-     data-plid="<?= $plId ?>" 
-     data-url="<?= $song['url'] ?>" 
-     data-name="<?= $song['name'] ?>" 
-     data-artist="<?= $song['artist'] ?>" 
-     data-duration="<?= $song['duration'] ?>"
-     data-position="<?= isset($position) ? $position : null ?>">
+     data-id="<?php echo $song['id'] ?>" 
+     data-plid="<?php echo $plId ?>" 
+     data-url="<?php echo $song['url'] ?>" 
+     data-name="<?php echo $song['name'] ?>" 
+     data-artist="<?php echo $song['artist'] ?>" 
+     data-duration="<?php echo $song['duration'] ?>"
+     data-position="<?php echo isset($position) ? $position : null ?>">
 
     <div class="op-subsong">
         <div class="op-fl">
@@ -13,10 +13,10 @@
         </div>
 
         <div>
-            <a href="javascript:void(0)" class="op-atrist"><?= htmlspecialchars($song['artist']) ?></a> 
+            <a href="javascript:void(0)" class="op-atrist"><?php echo htmlspecialchars($song['artist']) ?></a> 
              - 
-            <?= $song['name'] ?> 
-            (<?= $song['duration'] ?>)
+            <?php echo $song['name'] ?> 
+            (<?php echo $song['duration'] ?>)
 
             <span class="op-fr">
                 <?php
@@ -26,9 +26,9 @@
                 $via= "openwebplayer";
                 ?>
 
-                <a title="Ссылка на трек" class="op-icons op-icon-link" href="javascript:" onclick="prompt('Ссылка на трек', '<?=$normalUrl?>')">&nbsp;</a>
+                <a title="Ссылка на трек" class="op-icons op-icon-link" href="javascript:" onclick="prompt('Ссылка на трек', '<?php echo$normalUrl?>')">&nbsp;</a>
                 |
-                <a title="Твитнуть" class="op-icons op-icon-twitter" target="_blank" href="http://twitter.com/share?via=<?php echo $via?>&url=<?=$url?>&text=<?php echo $text?>">&nbsp;</a>
+                <a title="Твитнуть" class="op-icons op-icon-twitter" target="_blank" href="http://twitter.com/share?via=<?php echo $via?>&url=<?php echo$url?>&text=<?php echo $text?>">&nbsp;</a>
                 <a title="Показать друзьям вконтакте" class="op-icons op-icon-vk" target="_blank" href="http://vkontakte.ru/share.php?title=<?php echo $text?>&description=<?php echo $text?> <?php echo $url?>">&nbsp;</a>
                 <a title="Показать друзьям в фейсбуке" class="op-icons op-icon-facebook" target="_blank" href="http://www.facebook.com/sharer.php?u=<?php echo $url?>&t=<?php echo $text?> <?php echo $url?>">&nbsp;</a>
 
@@ -37,8 +37,8 @@
                         |
                         <a href="javascript:" 
                            class="op-link-song-del op-icons op-icon-song-del" 
-                           data-id="<?= $song['id'] ?>"
-                           data-plid="<?= $plId ?>">&nbsp;</a>
+                           data-id="<?php echo $song['id'] ?>"
+                           data-plid="<?php echo $plId ?>">&nbsp;</a>
                     </span>
                 
                 
