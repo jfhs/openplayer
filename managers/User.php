@@ -28,8 +28,9 @@ class User extends \Lib\Base\Manager {
 		$serializedSettings = json_encode($settings);
 		$serializedSettings = $this->pdo->quote($serializedSettings);
 		
-		$q = "UPDATE user SET settings = ? WHERE id = ?";
-		return $this->pdo->prepare($q)->execute(array($serializedSettings, $userId));
+		$res = $this->pdo->prepare("UPDATE user SET settings = ? WHERE id = ?");
+		$res->execute(array($serializedSettings, $userId));
+		return $res;
 	}
 
 	public static function getUserOption( $key ) {
@@ -109,7 +110,8 @@ class User extends \Lib\Base\Manager {
 	public function autologin() {
 		if ( !User::isLoggedIn() && isset($_COOKIE[ 'sessionKey' ]) ) {
 			$q = "SELECT * FROM user WHERE sessionKey = ?";
-			$res = $this->pdo->prepare($q)->execute(array($_COOKIE['sessionKey']));
+			$res = $this->pdo->prepare($q);
+			$res->execute(array($_COOKIE['sessionKey']));
 			
 			$user = $res->fetchObject();
 			
