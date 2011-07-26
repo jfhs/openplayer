@@ -13,6 +13,7 @@ baseUrl		= "ССЫЛКА_НА_СТРАНИЦУ_ПЛЕЕРА"
 songsCount	= 15
 
 fair_id		= "yes"
+suggestion_count = 5
 
 [storage]
 delete_by_request = "no"
