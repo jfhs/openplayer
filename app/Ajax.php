@@ -7,6 +7,7 @@ use \Lib\Request,
 class Ajax extends \Lib\Base\App {
 
     public function init() {
+    	define('AJAX', true);
         switch (Request::get('query')) {
             case 'search':
                 echo $this->render('songs');
