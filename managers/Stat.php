@@ -9,17 +9,17 @@ class Stat extends \Lib\Base\Manager {
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
-        $q = "SELECT * FROM stat WHERE artist = '{$artist}' AND ip = {$ip}";
-        $res = $this->pdo->query($q);
+        $q = $this->pdo->prepare("SELECT * FROM stat WHERE artist = ? AND ip = ?");
+        $res = $q->execute(array($artist, $ip));
         
         $q = "";
         if ( $res->fetchObject() ) {
-            $q = "UPDATE stat SET cnt = cnt + 1, updatedAt = NOW() WHERE artist = '{$artist}' AND ip = {$ip}";
+            $q = "UPDATE stat SET cnt = cnt + 1, updatedAt = NOW() WHERE artist = :artist AND ip = :ip";
         } else {
-            $q = "INSERT INTO stat VALUES (null, {$ip}, '{$artist}', 1, NOW(), NOW())";
+            $q = "INSERT INTO stat VALUES (null, :ip, :artist, 1, NOW(), NOW())";
         }
         
-        return $this->pdo->exec($q);
+        return $this->pdo->prepare($q)->execute(array(':ip' => $ip, ':artist' => $artist));
     }
     
     public function getRecommendations( $artist ) {
@@ -28,8 +28,8 @@ class Stat extends \Lib\Base\Manager {
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
-        $q = "SELECT * FROM stat WHERE artist = '{$artist}'";
-        $res = $this->pdo->query($q);
+        $q = "SELECT * FROM stat WHERE artist = ?";
+        $res = $this->pdo->prepare($q)->execute(array($artist));
         
         $ips = array();
         foreach ($res->fetchAll( \PDO::FETCH_OBJ ) as $song) {
@@ -37,26 +37,15 @@ class Stat extends \Lib\Base\Manager {
         }
         
         $stat =array();
-        if ( count($ips) ) { // @todo !!!!!!!!!!! sum count group by limit 5
-            $q = "SELECT * FROM stat WHERE ip IN (".join(',', $ips).")";
+        if ( count($ips) ) {
+            $q = "SELECT artist, SUM(cnt) as cnt FROM stat WHERE ip IN (".join(',', $ips).") GROUP BY artist ORDER BY s LIMIT 5";
             $res = $this->pdo->query($q);
             
-            foreach ($res->fetchAll( \PDO::FETCH_OBJ ) as $song) {
-                if ( !isset($stat[$song->artist]) ) {
-                    $stat[$song->artist] = 0;
-                }
-                
-                $stat[$song->artist] += $song->cnt;
-            }
-            
-            arsort($stat);
-            unset($stat[$artist]);
-            
-            $stat = array_slice($stat, 0, 5);
-        } 
-        
-        return $stat;
-    }
-    
-    
+            foreach ($res->fetchAll( \PDO::FETCH_OBJ ) as $s) {
+				$stat[$s->artist] = $s->cnt;
+			}
+		} 
+
+		return $stat;
+	}
 }
