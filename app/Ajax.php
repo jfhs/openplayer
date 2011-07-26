@@ -113,9 +113,12 @@ class Ajax extends \Lib\Base\App {
                 break;
             
             case 'deleteSong':
-                $path = 'assets/' . Request::get('id') . '.mp3';
-                if (file_exists($path))
-                    unlink($path);
+            	if (\Lib\Config::getInstance()->getOption('storage', 'delete_by_request') == 'yes') {
+	                $path = 'assets/' . Request::get('id') . '.mp3';
+	                if (file_exists($path)) {
+	                    unlink($path);
+	                }
+            	}
                 die;
                 break;
 
@@ -128,15 +131,20 @@ class Ajax extends \Lib\Base\App {
                     );
                 }
                 # /stat
-
-                $path = 'assets/' . preg_replace('#[^a-f0-9]#', '', Request::get('id')) . '.mp3';
-
-                if ( !file_exists($path) ) {
+				
+                $id = preg_replace('#[^a-f0-9]#', '', Request::get('id'));
+                
+                $path = $id . '.mp3';
+				
+                $storage = \Lib\Storage::getInstance(); 
+                $songs_manager = new \Manager\Songs;
+                
+                if ( !$storage->exists($path) ) {
                     $url = Request::get('url');
                     if (!preg_match('#http://cs[0-9]+\.vkontakte\.ru/u[0-9]+/audio/[a-f0-9]+\.mp3#', $url)) {
                     	die;
                     }
-                    $headers = get_headers($url);
+                    $headers = \Lib\Curl::get_headers($url, true);
                     $status = substr($headers[0], 9, 3);
 
                     if ('404' == $status) {
@@ -153,13 +161,20 @@ class Ajax extends \Lib\Base\App {
                             )
                         );
                     }
-
                     $song = file_get_contents($url);
-                    file_put_contents($path, $song);
+                    $storage->save($song, $path);
+                    $songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
                 }
-
+				
+                # stat
+				if (!isset($statManager)) {
+					$statManager = new \Manager\Stat; 
+				}
+				$statManager->logSong($id);
+				# /stat
+				
                 echo json_encode(array(
-                    'url' => "./{$path}"
+                    'url' => "./assets/{$path}"
                 ));
                 die;
                 break;
