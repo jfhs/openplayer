@@ -11,6 +11,10 @@ var Search = {
     },
     
     init: function() {
+    	$('.op-form-search input[type=text]').autocomplete({
+    			minLength: 0,
+    			source: "?app=ajax&query=suggest",
+    	});
         $('.op-form-search form').submit(function() {
             var data = $(this).serialize();
 //            Search.data = data;
@@ -51,10 +55,18 @@ var Search = {
             url: './',
             data: query+'&app=ajax&query=search',
             type: 'post',
+            dataType:   'json',
 
-            success: function(html) {
-                $('#opSongsPlace').html(html);
-
+            success: function(data) {
+            	if (!(/offset=[0-9]+/.test(query))) {
+            		$('#opSongsPlace').html('');
+            		$('#opSongsPlace').append(data.recomendation);
+            	}
+            	if ($("#opContainerSongs").size()) {
+            		$('#opContainerSongs').append(data.songs);	
+            	} else {
+            		$('#opSongsPlace').append(data.songs);
+            	}
                 Search.pagerEvents();
                 Playlists.init();
                 

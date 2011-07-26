@@ -10,16 +10,19 @@ function classLoad( $className ) {
         "Manager" => "managers"
     );
 
-    foreach ( $namespaces as $ns => $path ) {
-        if ( 0 === strpos( $className, "{$ns}\\" ) ) {
-            $pathArr = explode( "\\", $className );
-            $pathArr[0] = $path;
+	foreach ( $namespaces as $ns => $path ) {
+		if (( 0 === strpos( $className, "{$ns}\\" ) ) || ( 0 === strpos( $className, "\\{$ns}\\"))) {
+			$pathArr = explode( "\\", $className );
+			if ($pathArr[0] == '') {
+				array_shift($pathArr);
+			}
+			$pathArr[0] = $path;
 
-            $class = implode( DIRECTORY_SEPARATOR, $pathArr );
+			$class = implode( DIRECTORY_SEPARATOR, $pathArr );
 
-            require_once ROOT . DIRECTORY_SEPARATOR . "{$class}.php";
-        }
-    }
+			require_once ROOT . DIRECTORY_SEPARATOR . "{$class}.php";
+		}
+	}
 }
 
 spl_autoload_register("classLoad");

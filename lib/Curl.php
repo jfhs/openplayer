@@ -57,4 +57,18 @@ class Curl {
         return $response;
     }
 
+    //This functions uses HEAD instead of GET to get headers
+    public static function get_headers($url,$format=0) {
+    	$old = stream_context_get_options(stream_context_get_default(array()));
+    	$opts = array('http' =>
+			array('method' => 'HEAD'),
+		);
+		stream_context_set_default($opts);
+		$headers=get_headers($url,$format);
+		if (!isset($old['http']['method'])) {
+			$old['http']['method'] = 'GET';
+		}
+		stream_context_set_default($old);
+		return $headers;
+    }
 }

@@ -1,3 +1,7 @@
 nbproject
 configs/app.ini
 assets/config
+.settings
+.buildpath
+.project
+build.xml

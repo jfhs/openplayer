@@ -127,4 +127,12 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-07-24  2:33:25
+CREATE TABLE `songs` (
+  `song_id` varchar(32) CHARACTER SET latin1 NOT NULL,
+  `filename` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `hits` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) DEFAULT NULL,
+  `artist` varchar(255) DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  PRIMARY KEY (`song_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
