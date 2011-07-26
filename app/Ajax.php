@@ -129,10 +129,13 @@ class Ajax extends \Lib\Base\App {
                 }
                 # /stat
 
-                $path = 'assets/' . Request::get('id') . '.mp3';
+                $path = 'assets/' . preg_replace('#[^a-f0-9]#', '', Request::get('id')) . '.mp3';
 
                 if ( !file_exists($path) ) {
                     $url = Request::get('url');
+                    if (!preg_match('#http://cs[0-9]+\.vkontakte\.ru/u[0-9]+/audio/[a-f0-9]+\.mp3#', $url)) {
+                    	die;
+                    }
                     $headers = get_headers($url);
                     $status = substr($headers[0], 9, 3);
 
