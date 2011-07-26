@@ -3,7 +3,7 @@
     Похожие исполнители: 
     <?php $atrs = array() ?>
     <?php foreach($this->recommendations as $art => $cnt): ?>
-        <?php $atrs[] = '<a href="javascript:void(0)" class="op-atrist">'.trim($art).'</a>'; ?>
+        <?php $atrs[] = '<a href="javascript:void(0)" class="op-atrist">'.htmlspecialchars(trim($art)).'</a>'; ?>
     <?php endforeach ?>
     
     <?php echo join(', ', $atrs) ?>

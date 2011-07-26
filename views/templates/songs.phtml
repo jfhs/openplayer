@@ -15,8 +15,8 @@
 
     <?php if (! \Lib\Request::get('l') ): ?> 
         <?php if (\Lib\Request::get('offset')): ?> 
-            <a id="opPagerSongsPrev" href="?q=<?= \Lib\Request::get('q') ?>&offset=<?= (\Lib\Request::get('offset') - \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">&leftarrow; Предыдущие</a>
+            <a id="opPagerSongsPrev" href="?q=<?= urlencode(\Lib\Request::get('q')) ?>&offset=<?= (\Lib\Request::get('offset') - \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">&leftarrow; Предыдущие</a>
         <?php endif ?>
-        <a id="opPagerSongsNext" href="?q=<?= \Lib\Request::get('q') ?>&offset=<?= (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Следующие &rightarrow;</a>
+        <a id="opPagerSongsNext" href="?q=<?= urlencode(\Lib\Request::get('q')) ?>&offset=<?= (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Следующие &rightarrow;</a>
     <?php endif ?>
 <? endif ?>
