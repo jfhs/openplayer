@@ -6,11 +6,17 @@ db          = "MYSQL_DB"
 charset     = "utf8"
 
 [app]
-title       = "Open Player"
-charset     = "UTF-8"
+title		= "Open Player"
+charset		= "UTF-8"
 
-baseUrl    = "ССЫЛКА_НА_СТРАНИЦУ_ПЛЕЕРА"
-songsCount  = 15
+baseUrl		= "ССЫЛКА_НА_СТРАНИЦУ_ПЛЕЕРА"
+songsCount	= 15
+
+fair_id		= "yes"
+
+[storage]
+delete_by_request = "no"
+max_size	= 200
 
 [vk]
 userAgent   = "Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 ( .NET CLR 3.5.30729)"
