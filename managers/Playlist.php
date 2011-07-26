@@ -81,20 +81,19 @@ class Playlist extends \Lib\Base\Manager {
         }
         
         $id = intval($id);
-        $name = strip_tags($name);
-        $name = $this->pdo->quote($name);
         
         $user = User::getUser();
         $userId = intval($user->id);
         
-        $q = "UPDATE pl SET name = {$name} WHERE id = {$id} AND userId = {$userId}";
-        return $this->pdo->exec( $q );
+        $q = "UPDATE pl SET name = ? WHERE id = ? AND userId = ?";
+        return $this->pdo->prepare($q)->execute(array($name, $id, $userId));
     }
 
     public function delSongFromPL( $id, $plId ) {
         if ( !$this->checkIfMine( $plId ) ) {
             return false;
         }
+        $plId = intval($plId);
         
         $pos = $this->getSongPosition( $id, $plId );
         $this->downPositions( $pos, $plId );
@@ -108,6 +107,7 @@ class Playlist extends \Lib\Base\Manager {
     
     private function downPositions( $afterPosition, $plId ) {
         $plId = intval($plId);
+        $afterPosition = intval($afterPosition);
         
         $q = "UPDATE pl_song SET position = position - 1 WHERE plId = {$plId} AND position > {$afterPosition}";
         $this->pdo->exec( $q );
@@ -115,6 +115,7 @@ class Playlist extends \Lib\Base\Manager {
     
     private function upPositions( $afterPosition, $plId ) {
         $plId = intval($plId);
+        $afterPosition = intval($afterPosition);
         
         $q = "UPDATE pl_song SET position = position + 1 WHERE plId = {$plId} AND position > {$afterPosition}";
         $this->pdo->exec( $q );
@@ -187,9 +188,10 @@ class Playlist extends \Lib\Base\Manager {
             
             $songInfo = serialize($songInfo);
             $songInfo = $this->pdo->quote($songInfo);
+            $id = $this->pdo->quote($id);
 //            $songInfo = strip_tags($songInfo);
             
-            $q = "UPDATE pl_song SET songInfo = {$songInfo} WHERE songId = '{$id}'";
+            $q = "UPDATE pl_song SET songInfo = {$songInfo} WHERE songId = {$id}";
             $this->pdo->exec($q);
         }
         
