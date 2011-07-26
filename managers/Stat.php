@@ -9,8 +9,8 @@ class Stat extends \Lib\Base\Manager {
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
-        $q = $this->pdo->prepare("SELECT * FROM stat WHERE artist = ? AND ip = ?");
-        $res = $q->execute(array($artist, $ip));
+        $res = $this->pdo->prepare("SELECT * FROM stat WHERE artist = ? AND ip = ?");
+        $res->execute(array($artist, $ip));
         
         $q = "";
         if ( $res->fetchObject() ) {
@@ -18,8 +18,14 @@ class Stat extends \Lib\Base\Manager {
         } else {
             $q = "INSERT INTO stat VALUES (null, :ip, :artist, 1, NOW(), NOW())";
         }
-        
-        return $this->pdo->prepare($q)->execute(array(':ip' => $ip, ':artist' => $artist));
+        $res = $this->pdo->prepare($q);
+      	$res->execute(array(':ip' => $ip, ':artist' => $artist));
+        return $res;
+    }
+    
+    public function logSong($id) {
+    	return $this->pdo->prepare("UPDATE songs SET hits=hits+1 WHERE song_id=?")
+    		->execute(array($id));
     }
     
     public function getRecommendations( $artist ) {
@@ -29,7 +35,8 @@ class Stat extends \Lib\Base\Manager {
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
         $q = "SELECT * FROM stat WHERE artist = ?";
-        $res = $this->pdo->prepare($q)->execute(array($artist));
+        $res = $this->pdo->prepare($q);
+        $res->execute(array($artist));
         
         $ips = array();
         foreach ($res->fetchAll( \PDO::FETCH_OBJ ) as $song) {
@@ -38,9 +45,8 @@ class Stat extends \Lib\Base\Manager {
         
         $stat =array();
         if ( count($ips) ) {
-            $q = "SELECT artist, SUM(cnt) as cnt FROM stat WHERE ip IN (".join(',', $ips).") GROUP BY artist ORDER BY s LIMIT 5";
+            $q = "SELECT artist, SUM(cnt) as cnt FROM stat WHERE ip IN (".join(',', $ips).") GROUP BY artist ORDER BY cnt LIMIT 5";
             $res = $this->pdo->query($q);
-            
             foreach ($res->fetchAll( \PDO::FETCH_OBJ ) as $s) {
 				$stat[$s->artist] = $s->cnt;
 			}
