@@ -85,8 +85,9 @@ class Playlist extends \Lib\Base\Manager {
         $user = User::getUser();
         $userId = intval($user->id);
         
-        $q = "UPDATE pl SET name = ? WHERE id = ? AND userId = ?";
-        return $this->pdo->prepare($q)->execute(array($name, $id, $userId));
+        $res = $this->pdo->prepare("UPDATE pl SET name = ? WHERE id = ? AND userId = ?");
+        $res->execute(array($name, $id, $userId));
+        return $res;
     }
 
     public function delSongFromPL( $id, $plId ) {
