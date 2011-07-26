@@ -17,6 +17,46 @@ var Playlists = {
     },
     
     init: function() {
+    	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
+    	$(document).resize(function() {
+    		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
+    	});
+        $("#jquery_jplayer_1").jPlayer({
+        	swfPath: "./web/lib",
+        	solution: "flash, html",
+        	supplied: "mp3",
+
+        	ready: function() {
+        		//should we wait until it will say it is ready or leave it like this is ok?
+        	},
+	        ended: function() {
+	        	Playlists.playSong( Playlists.prevSong.next() );
+	        },
+	        pause: function() {
+	        	$(".jp-pause").hide();
+	        	$(".jp-play").show();
+	        },
+	        play: function() {
+	        	$(".jp-pause").show();
+	        	$(".jp-play").hide();
+	        },
+	        mute: function() {
+	        	$(".jp-mute").hide();
+	        	$(".jp-unmute").show();
+	        },
+	        unmute: function() {
+	        	$(".jp-mute").show();
+	        	$(".jp-unmute").hide();
+	        },
+        });
+        $(".jp-progress").hover(function() {
+        	$("#song-title").show();
+        }, function() {
+        	$("#song-title").hide();
+        });
+        $("#song-title").click(function(e) {
+        	$("#jquery_jplayer_1").jPlayer("playHead", (100*e.offsetX)/$(this).width());
+        });
         $('.op-link-song-del').unbind();
         $('.op-link-song-del').click(function() {
             if ( confirm( 'Уверен что хочешь удалить песню из плейлиста?' ) ) {
@@ -112,7 +152,7 @@ var Playlists = {
         
         $('#opLinkNewPlaylist').unbind();
         $('#opLinkNewPlaylist').click(function() {
-            var name = prompt('Ввыеди имя для нового плейлиста', 'Новый плейлист');
+            var name = prompt('Введи имя для нового плейлиста', 'Новый плейлист');
 
             if ( name && name.trim() ) {
                 Loading.on();
@@ -222,7 +262,6 @@ var Playlists = {
         }
         self.prevSong = $(par);
         
-        
         $.ajax({
             url: './',
             data: {
@@ -240,26 +279,10 @@ var Playlists = {
                 if (data.url) {
                     $('.op-nowplaying').removeClass('op-nowplaying');
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');
-                    
-                    jwplayer("opAudioPlayer").setup({
-                        flashplayer:    "./web/lib/jwplayer/player.swf",
-                        file:           data.url,
-//                        backcolor:      'EEEEEE',
-//                        frontcolor:     '333333',
-//                        lightcolor:     '333333',
-//                        screencolor:    '333333',
-                        height:         '24',
-                        id:             'playerID',
-                        width:          '100%',
-                        controlbar:     'bottom',
-                        skin:           './web/lib/jwplayer/minima.zip',
-
-                        events: {
-                            onComplete: function(event) {
-                                Playlists.playSong( par.next() );
-                            }
-                        }
-                    }).play();
+                    $("#jquery_jplayer_1").jPlayer("setMedia", {"mp3": data.url}).jPlayer("play");
+                    var title = self.prevSong.data('artist') + ' - ' + self.prevSong.data('name');
+                    $("#song-title").html(title);
+                    $("title").html(title);
                 } else {
                     alert("Что-то пошло не так:(");
                 }
