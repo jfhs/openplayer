@@ -13,9 +13,9 @@
         </div>
 
         <div>
-            <a href="javascript:void(0)" class="op-atrist"><?php echo htmlspecialchars($song['artist']) ?></a> 
+            <a href="javascript:void(0)" class="op-atrist"><?php echo str_replace('<', '&lt;', $song['artist']) ?></a> 
              - 
-            <?php echo $song['name'] ?> 
+            <?php echo str_replace('<', '&lt;', $song['name']) ?> 
             (<?php echo $song['duration'] ?>)
 
             <span class="op-fr">
