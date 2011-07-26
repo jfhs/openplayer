@@ -1,8 +1,10 @@
 <?php
 namespace App;
+
 use \Lib\Request,
     \Manager\Playlist,
-    \Manager\User;
+    \Manager\User,
+    \Manager\Suggest;
 
 class Ajax extends \Lib\Base\App {
 
@@ -13,6 +15,10 @@ class Ajax extends \Lib\Base\App {
                 echo $this->render('songs');
                 die;
                 break;
+            case 'suggest':
+            	$suggest = new Suggest;
+            	echo json_encode($suggest->get(Request::get('term', '')));
+            	die;
             case 'addPL':
                 $playlistsManager = new Playlist;
                 $status = $playlistsManager->addPL(
