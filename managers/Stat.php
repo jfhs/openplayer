@@ -4,8 +4,8 @@ namespace Manager;
 class Stat extends \Lib\Base\Manager {
     
     public function log( $artist ) {
-        $artist = strip_tags($artist);
-        $artist = $this->pdo->query($artist);
+        $artist = strip_tags(trim($artist));
+        //$artist = $this->pdo->quote($artist);
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
