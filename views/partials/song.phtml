@@ -13,7 +13,7 @@
         </div>
 
         <div>
-            <a href="javascript:void(0)" class="op-atrist"><?= $song['artist'] ?></a> 
+            <a href="javascript:void(0)" class="op-atrist"><?= htmlspecialchars($song['artist']) ?></a> 
              - 
             <?= $song['name'] ?> 
             (<?= $song['duration'] ?>)
