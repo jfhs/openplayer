@@ -30,6 +30,7 @@ class AudioParser {
         );
 
         $songs = array();
+        $songs_manager = new \Manager\Songs;
         foreach ($matches as $audioItem) {
             preg_match_all(
                 '/<div class="duration fl_r">(.*)<\/div>/', 
@@ -69,7 +70,16 @@ class AudioParser {
                 'Windows-1251'
             );
 
-            $song['id'] = md5($songname);
+			if (Config::getInstance()->getOption('app', 'fair_id') == 'yes') {
+				$headers = \Lib\Curl::get_headers($song['url'], true);
+				if (!isset($headers['Content-Length'])) {
+					//this could be caused by expired token...invoke re-search or skip track?
+					continue;
+				}
+				$song['id'] = md5($songname.$headers['Content-Length']);
+			} else {
+				$song['id'] = md5($songname.$song['duration']);
+			}
 
             @list(
                 $song['artist'], 
@@ -80,6 +90,7 @@ class AudioParser {
             );
 
             $songs[$song['id']] = $song;
+            $songs_manager->addSong($song['id'], '', $song['name'], $song['artist']);
         }
 
         return $songs;
