@@ -51,10 +51,18 @@ var Search = {
             url: './',
             data: query+'&app=ajax&query=search',
             type: 'post',
+            dataType:   'json',
 
-            success: function(html) {
-                $('#opSongsPlace').html(html);
-
+            success: function(data) {
+            	if (!(/offset=[0-9]+/.test(query))) {
+            		$('#opSongsPlace').html('');
+            		$('#opSongsPlace').append(data.recomendation);
+            	}
+            	if ($("#opContainerSongs").size()) {
+            		$('#opContainerSongs').append(data.songs);	
+            	} else {
+            		$('#opSongsPlace').append(data.songs);
+            	}
                 Search.pagerEvents();
                 Playlists.init();
                 
