@@ -16,39 +16,44 @@ var Playlists = {
         });
     },
     
+    player_init: false,
+    
     init: function() {
     	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
     	$(document).resize(function() {
     		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
     	});
-        $("#jquery_jplayer_1").jPlayer({
-        	swfPath: "./web/lib",
-        	solution: "flash, html",
-        	supplied: "mp3",
-
-        	ready: function() {
-        		//should we wait until it will say it is ready or leave it like this is ok?
-        	},
-	        ended: function() {
-	        	Playlists.playSong( Playlists.prevSong.next() );
-	        },
-	        pause: function() {
-	        	$(".jp-pause").hide();
-	        	$(".jp-play").show();
-	        },
-	        play: function() {
-	        	$(".jp-pause").show();
-	        	$(".jp-play").hide();
-	        },
-	        mute: function() {
-	        	$(".jp-mute").hide();
-	        	$(".jp-unmute").show();
-	        },
-	        unmute: function() {
-	        	$(".jp-mute").show();
-	        	$(".jp-unmute").hide();
-	        },
-        });
+    	if (!this.player_init) {
+    		this.player_init = true;
+	        $("#jquery_jplayer_1").jPlayer({
+	        	swfPath: "./web/lib",
+	        	solution: "flash, html",
+	        	supplied: "mp3",
+	
+	        	ready: function() {
+	        		//should we wait until it will say it is ready or leave it like this is ok?
+	        	},
+		        ended: function() {
+		        	Playlists.playSong( Playlists.prevSong.next() );
+		        },
+		        pause: function() {
+		        	$(".jp-pause").hide();
+		        	$(".jp-play").show();
+		        },
+		        play: function() {
+		        	$(".jp-pause").show();
+		        	$(".jp-play").hide();
+		        },
+		        mute: function() {
+		        	$(".jp-mute").hide();
+		        	$(".jp-unmute").show();
+		        },
+		        unmute: function() {
+		        	$(".jp-mute").show();
+		        	$(".jp-unmute").hide();
+		        },
+	        });
+    	}
         $(".jp-progress").hover(function() {
         	$("#song-title").show();
         }, function() {
