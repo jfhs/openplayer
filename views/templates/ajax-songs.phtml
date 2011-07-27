@@ -16,10 +16,14 @@ if ( !count($this->songs) ) {
         <?php endforeach ?>
 <?php if (!\Lib\Request::get('offset', false)):?>
     </div>
-    <a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a>
 <?php endif;?>
 <?php
 	$return['songs'] = ob_get_clean();
+	ob_start();
+?>
+	<a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a>
+<?php
+	$return['next'] = ob_get_clean();
 }
 echo json_encode($return);
 ?>
