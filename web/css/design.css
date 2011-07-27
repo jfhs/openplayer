@@ -246,9 +246,9 @@ body a:hover {
 }
 
 .jp-volume {
-	float: right;
-	width: 120px;
-	margin-right: 5px;
+	position: absolute;
+    right: 5px;
+    top: 1px;
 }
 
 .jp-volume-bar {

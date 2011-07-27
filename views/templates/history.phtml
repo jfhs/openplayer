@@ -1,7 +1,9 @@
-<div class="op-history">
-    <?php foreach ($this->history as $item): ?>
-        <?php $h[] = '<a class="op-atrist" href="javascript:void(0)">'.$item.'</a>'?>
-    <?php endforeach; ?>
-    
-    Последние поиски: <?php echo join(', ', $h) ?>
-</div>
+<?php if (count($this->history)): ?>
+    <div class="op-history">
+        <?php foreach ($this->history as $item): ?>
+            <?php $h[] = '<a class="op-atrist" href="javascript:void(0)">'.$item.'</a>'?>
+        <?php endforeach; ?>
+
+        Последние поиски: <?php echo join(', ', $h) ?>
+    </div>
+<?php endif ?>
