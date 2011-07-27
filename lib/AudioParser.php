@@ -79,7 +79,7 @@ class AudioParser {
             if (preg_match('#<b>(.+?)</b>#', $s, $artist)) {
             	$song['artist'] = strip_tags(trim($artist[1]));
             }
-            if (preg_match('#<span class="title">(.+?)</span>#', $s, $name)) {
+            if (preg_match('#<span class="title">(.+?)<span class="user">#', $s, $name)) {
             	$song['name'] = strip_tags(trim($name[1]));
             }
 
