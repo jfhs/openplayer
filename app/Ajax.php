@@ -169,8 +169,9 @@ class Ajax extends \Lib\Base\App {
                         );
                     }
                     $song = file_get_contents($url);
-                    $storage->save($song, $path);
-                    $songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
+                    if ($storage->save($song, $path)) {
+                    	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
+                    }
                 }
 				
                 # stat
