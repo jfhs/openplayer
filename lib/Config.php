@@ -22,8 +22,12 @@ class Config {
     }
     private function __clone() {}
     
-    public function getOptions() {
-        return $this->config;
+    public function getOptions( $section = null ) {
+        if ( null == $section) {
+            return $this->config;
+        } else {
+            return $this->config[$section];
+        }
     }
     
     public function getOption( $section, $key ) {

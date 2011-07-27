@@ -1,5 +1,4 @@
 RewriteEngine On
 
 RewriteRule ^web/(.*)$ web/$1 [L]
-RewriteRule ^assets/(.*).mp3$ assets/$1.mp3 [L]
 RewriteRule ^.*$ index.php [L]

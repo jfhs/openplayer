@@ -27,7 +27,8 @@ var Playlists = {
 	        	supplied: "mp3",
 	
 	        	ready: function() {
-	        		//should we wait until it will say it is ready or leave it like this is ok?
+	        		// should we wait until it will
+	        		// say it is ready or leave it like this is ok?
 	        	},
 		        ended: function() {
 		        	Playlists.next();
@@ -49,14 +50,18 @@ var Playlists = {
 		        	$(".jp-unmute").hide();
 		        },
 	        });
-	    	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-25-$('.jp-right').width()));
+	    	$('.jp-progress').css("width", 
+    			($('.jp-progress').parent().width()-25-$('.jp-right').width())
+	    	);
 	    	$(document).resize(function() {
-	    		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-25-$('.jp-right').width()));
+	    		$('.jp-progress').css("width", 
+	    			($('.jp-progress').parent().width()-25-$('.jp-right').width())
+	    		);
 	    	});
 	        $(".jp-progress").hover(function() {
-	        	$("#song-title").show();
+	        	$("#song-title").show('slow');
 	        }, function() {
-	        	$("#song-title").hide();
+	        	$("#song-title").hide('slow');
 	        });
 	        $("#song-title").click(function(e) {
 	        	var offset;
@@ -65,7 +70,9 @@ var Playlists = {
 	        	} else {
 	        		offset = e.offsetX;
 	        	}
-	        	$("#jquery_jplayer_1").jPlayer("playHead", (100*offset)/$(this).width());
+	        	$("#jquery_jplayer_1").jPlayer("playHead", 
+	        		(100*offset)/$(this).width()
+	        	);
 	        });
 	        $(".jp-shuffle").click(function() {
 	        	Playlists.shuffle = !Playlists.shuffle;
@@ -260,7 +267,7 @@ var Playlists = {
                 }
                 
             }
-		}).disableSelection();
+        }).disableSelection();
         
         $('.op-link-song-play').unbind();
         $('.op-link-song-play').click(function() {
@@ -321,7 +328,7 @@ var Playlists = {
         var self = this;
         Loading.on();
         
-        if ( null != self.prevSong ) {
+        if ( Settings.deleteSong && null != self.prevSong ) {
             // detele prev song from server
             $.ajax({
                 url: './',
@@ -353,7 +360,9 @@ var Playlists = {
                 if (data.url) {
                     $('.op-nowplaying').removeClass('op-nowplaying');
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');
-                    $("#jquery_jplayer_1").jPlayer("setMedia", {"mp3": data.url}).jPlayer("play");
+                    $("#jquery_jplayer_1").jPlayer("setMedia", {
+                        "mp3": data.url
+                        }).jPlayer("play");
                     var title = self.prevSong.data('artist') + ' - ' + self.prevSong.data('name');
                     self.prevSong.addClass("played");
                     $("#song-title").html(title);
