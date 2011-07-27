@@ -12,14 +12,13 @@ charset		= "UTF-8"
 baseUrl		= "ССЫЛКА_НА_СТРАНИЦУ_ПЛЕЕРА"
 songsCount	= 15
 
-fair_id		= "yes"
+fair_id		= "no"
 suggestion_count = 5
 
 ; recommend to false, works bad
 logSongs = false
 
 [storage]
-delete_by_request = "no"
 max_size	= 200
 
 [vk]
@@ -27,3 +26,7 @@ userAgent   = "Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.2.13) Gecko/2
 id          = "АЙДИ_ВКОНТАКТЕ"
 login       = "ЕМЕЙЛ_ВКОНТАКТЕ"
 password    = "ПАРОЛЬ_ВКОНТАКТЕ"
+
+[client] ; js settings
+deleteSong = true ; delete songs from server
+

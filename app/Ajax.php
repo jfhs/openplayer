@@ -14,10 +14,12 @@ class Ajax extends \Lib\Base\App {
                 echo $this->render('songs');
                 die;
                 break;
+            
             case 'suggest':
             	$suggest = new Suggest;
             	echo json_encode($suggest->get(Request::get('term', '')));
             	die;
+                
             case 'addPL':
                 $playlistsManager = new Playlist;
                 $status = $playlistsManager->addPL(
@@ -65,6 +67,7 @@ class Ajax extends \Lib\Base\App {
                 ));
                 die;
                 break;
+            
             case 'moveSongToPL':
                 $playlistsManager = new Playlist;
                 $status = $playlistsManager->moveSongToPL(
@@ -119,12 +122,11 @@ class Ajax extends \Lib\Base\App {
                 break;
             
             case 'deleteSong':
-            	if (\Lib\Config::getInstance()->getOption('storage', 'delete_by_request') == 'yes') {
-	                $path = 'assets/' . Request::get('id') . '.mp3';
-	                if (file_exists($path)) {
-	                    unlink($path);
-	                }
-            	}
+                $path = 'web/assets/' . Request::get('id') . '.mp3';
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
                 die;
                 break;
 
@@ -132,27 +134,26 @@ class Ajax extends \Lib\Base\App {
                 # stat
                 if ( Request::get('artist') ) {
                     $statManager = new \Manager\Stat;
+                    
                     $statManager->log(
                         Request::get('artist')
                     );
                 }
                 # /stat
 				
-                $id = preg_replace('#[^a-f0-9]#', '', Request::get('id'));
+                // fix back, work faster
                 
-                $path = $id . '.mp3';
-				
-                $storage = \Lib\Storage::getInstance(); 
-                $songs_manager = new \Manager\Songs;
+                $id = Request::get('id');
+//                $folders = "web/assets/" . \Lib\Helper::calcPath( $id ); // @todo
+//                mkdir($path, 0777, true);
+                $path = "web/assets/{$id}.mp3";
                 
-                if ( !$storage->exists($path) ) {
+                if ( !file_exists( $path ) ) {
                     $url = Request::get('url');
-                    if (!preg_match('#http://cs[0-9]+\.vkontakte\.ru/u[0-9]+/audio/[a-f0-9]+\.mp3#', $url)) {
-                    	die;
-                    }
-                    $headers = \Lib\Curl::get_headers($url, true);
+                    
+                    $headers = get_headers($url);
                     $status = substr($headers[0], 9, 3);
-
+                    
                     if ('404' == $status) {
                         $song = reset(\Lib\AudioParser::search(
                             Request::get('artist') . ' - ' . Request::get('name')
@@ -167,10 +168,10 @@ class Ajax extends \Lib\Base\App {
                             )
                         );
                     }
+                    
                     $song = file_get_contents($url);
-                    $storage->save($song, $path);
-                    $songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
-                }
+                    file_put_contents($path, $song);
+                } 
 				
                 # stat
 				if (!isset($statManager)) {
@@ -180,7 +181,7 @@ class Ajax extends \Lib\Base\App {
 				# /stat
 				
                 echo json_encode(array(
-                    'url' => "./assets/{$path}"
+                    'url' => "./{$path}"
                 ));
                 die;
                 break;

@@ -289,7 +289,7 @@ var Playlists = {
         var self = this;
         Loading.on();
         
-        if ( null != self.prevSong ) {
+        if ( Settings.deleteSong && null != self.prevSong ) {
             // detele prev song from server
             $.ajax({
                 url: './',

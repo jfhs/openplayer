@@ -26,6 +26,8 @@
             if ( location.hash.match(/#!/) ) {
                 location.href = location.hash.replace("#!", "");
             }
+            
+            var Settings = <?php echo json_encode(\Lib\Config::getInstance()->getOptions('client'))?>;
         </script>
         
         <?php echo $this->content ?>
