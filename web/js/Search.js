@@ -44,7 +44,11 @@ var Search = {
         });
     },
     
-    loadSongs: function(data) {
+    loadNext: function(cb) {
+        Search.loadSongs($('#opPagerSongsNext').attr('href').replace('?',''), cb);
+    },
+    
+    loadSongs: function(data, cb) {
         Loading.on();
         
         var query = data;
@@ -67,12 +71,19 @@ var Search = {
             	} else {
             		$('#opSongsPlace').append(data.songs);
             	}
+            	if($("#opNextBtnContainer").size() == 0) {
+            		$("#opSongsPlace").append("<div id='opNextBtnContainer'></div>");
+            	}
+            	$("#opNextBtnContainer").html(data.next);
                 Search.pagerEvents();
                 Playlists.init();
                 
                 Search.artistClick();
                 
                 Loading.off();
+                if (typeof(cb) != 'undefined') {
+                	cb();
+                }
             }
 
         });

@@ -21,7 +21,7 @@ else:?>
         <?php if (\Lib\Request::get('offset')): ?> 
             <a id="opPagerSongsPrev" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') - \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Предыдущие</a>
         <?php endif ?>
-        <a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a>
+        <div id='opNextBtnContainer'><a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a></div>
     <?php endif ?>
 <?php endif; ?>
 <?php endif;?>
