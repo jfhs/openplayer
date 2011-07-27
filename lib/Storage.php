@@ -114,6 +114,9 @@ class Storage {
 	}
 	
 	public function save($data, $filename) {
+		if (!$data) {
+			return false;
+		}
 		if ($max_size = Config::getInstance()->getOption('storage', 'max_size')*1024*1024) {
 			$data_size = strlen($data);
 			$my_size = $this->size(); 
