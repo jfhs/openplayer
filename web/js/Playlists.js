@@ -19,10 +19,6 @@ var Playlists = {
     player_init: false,
     
     init: function() {
-    	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
-    	$(document).resize(function() {
-    		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
-    	});
     	if (!this.player_init) {
     		this.player_init = true;
 	        $("#jquery_jplayer_1").jPlayer({
@@ -34,17 +30,7 @@ var Playlists = {
 	        		//should we wait until it will say it is ready or leave it like this is ok?
 	        	},
 		        ended: function() {
-		        	var next = Playlists.prevSong.next();
-		        	if (next.size() == 0) {
-		        		if (Playlists.prevSong.parents("#opContainerSongs").size()) {
-		        			Search.loadNext(function() {
-		        				next = Playlists.prevSong.next();
-		    		        	Playlists.playSong( next );
-		        			});
-		        		}
-		        	} else {
-		        		Playlists.playSong( next );
-		        	}
+		        	Playlists.next();
 		        },
 		        pause: function() {
 		        	$(".jp-pause").hide();
@@ -63,21 +49,42 @@ var Playlists = {
 		        	$(".jp-unmute").hide();
 		        },
 	        });
+	    	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-25-$('.jp-right').width()));
+	    	$(document).resize(function() {
+	    		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-25-$('.jp-right').width()));
+	    	});
+	        $(".jp-progress").hover(function() {
+	        	$("#song-title").show();
+	        }, function() {
+	        	$("#song-title").hide();
+	        });
+	        $("#song-title").click(function(e) {
+	        	var offset;
+	        	if (typeof(e.offsetX) == 'undefined') {
+	        		offset = e.layerX;
+	        	} else {
+	        		offset = e.offsetX;
+	        	}
+	        	$("#jquery_jplayer_1").jPlayer("playHead", (100*offset)/$(this).width());
+	        });
+	        $(".jp-shuffle").click(function() {
+	        	Playlists.shuffle = !Playlists.shuffle;
+	        	$(this).toggleClass("enabled");
+	        });
+	        $(".jp-repeat").click(function() {
+	        	if (Playlists.repeat == Playlists.NO_REPEAT) {
+	        		Playlists.repeat = Playlists.REPEAT_PLAYLIST;
+	        		$(this).addClass("playlist");
+	        	} else if(Playlists.repeat == Playlists.REPEAT_PLAYLIST) {
+	        		Playlists.repeat = Playlists.REPEAT_SONG;
+	        		$(this).removeClass("playlist");
+	        		$(this).addClass("one_song");
+	        	} else {
+	        		Playlists.repeat = Playlists.NO_REPEAT;
+	        		$(this).removeClass("one_song");
+	        	}
+	        });
     	}
-        $(".jp-progress").hover(function() {
-        	$("#song-title").show();
-        }, function() {
-        	$("#song-title").hide();
-        });
-        $("#song-title").click(function(e) {
-        	var offset;
-        	if (typeof(e.offsetX) == 'undefined') {
-        		offset = e.layerX;
-        	} else {
-        		offset = e.offsetX;
-        	}
-        	$("#jquery_jplayer_1").jPlayer("playHead", (100*offset)/$(this).width());
-        });
         $('.op-link-song-del').unbind();
         $('.op-link-song-del').click(function() {
             if ( confirm( 'Уверен что хочешь удалить песню из плейлиста?' ) ) {
@@ -262,6 +269,52 @@ var Playlists = {
         
     },
     
+    shuffle: false,
+    
+    NO_REPEAT: false,
+    REPEAT_PLAYLIST: 1,
+    REPEAT_SONG: 2,
+    
+    repeat: false,
+    
+    next: function() {
+    	if (this.prevSong == null) {
+    		return; //Or may be search for some song?
+    	}
+    	if (this.repeat == this.REPEAT_SONG) {
+    		this.playSong(this.prevSong);
+    		return;
+    	}
+    	if (!this.shuffle) {
+    		var next = this.prevSong.next();
+    		if (next.size() == 0) {
+    			if (this.repeat == this.REPEAT_PLAYLIST) {
+    				next = $(this.prevSong.parents(".op-container-songbox").children().get(0));
+    			} else {
+	        		if (Playlists.prevSong.parents("#opContainerSongs").size()) {
+	        			Search.loadNext(function() {
+	    		        	Playlists.next();
+	        			});
+	        			return;
+	        		}
+    			}
+    		}
+    		if (next.size() != 0) {
+        		this.playSong(next);
+    		}
+    		return;
+    	} else {
+    		var list = this.prevSong.parents(".op-container-songbox").children();
+    		if (this.repeat == this.NO_REPEAT) {
+    			list = list.filter(":not(.played)");
+    		}
+    		if (list.size() == 0) {
+    			return;
+    		}
+    		this.playSong($(list.get(Math.round(Math.random()*(list.size() - 1)))));
+    	}
+    },
+    
     prevSong: null,
     
     playSong: function( par ) {
@@ -302,6 +355,7 @@ var Playlists = {
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');
                     $("#jquery_jplayer_1").jPlayer("setMedia", {"mp3": data.url}).jPlayer("play");
                     var title = self.prevSong.data('artist') + ' - ' + self.prevSong.data('name');
+                    self.prevSong.addClass("played");
                     $("#song-title").html(title);
                     $("title").html(title);
                 } else {
