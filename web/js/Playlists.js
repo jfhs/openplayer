@@ -34,7 +34,17 @@ var Playlists = {
 	        		//should we wait until it will say it is ready or leave it like this is ok?
 	        	},
 		        ended: function() {
-		        	Playlists.playSong( Playlists.prevSong.next() );
+		        	var next = Playlists.prevSong.next();
+		        	if (next.size() == 0) {
+		        		if (Playlists.prevSong.parents("#opContainerSongs").size()) {
+		        			Search.loadNext(function() {
+		        				next = Playlists.prevSong.next();
+		    		        	Playlists.playSong( next );
+		        			});
+		        		}
+		        	} else {
+		        		Playlists.playSong( next );
+		        	}
 		        },
 		        pause: function() {
 		        	$(".jp-pause").hide();
@@ -60,7 +70,13 @@ var Playlists = {
         	$("#song-title").hide();
         });
         $("#song-title").click(function(e) {
-        	$("#jquery_jplayer_1").jPlayer("playHead", (100*e.offsetX)/$(this).width());
+        	var offset;
+        	if (typeof(e.offsetX) == 'undefined') {
+        		offset = e.layerX;
+        	} else {
+        		offset = e.offsetX;
+        	}
+        	$("#jquery_jplayer_1").jPlayer("playHead", (100*offset)/$(this).width());
         });
         $('.op-link-song-del').unbind();
         $('.op-link-song-del').click(function() {
