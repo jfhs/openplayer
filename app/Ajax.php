@@ -7,7 +7,6 @@ use \Lib\Request,
     \Manager\Suggest;
 
 class Ajax extends \Lib\Base\App {
-
     public function init() {
     	define('AJAX', true);
         switch (Request::get('query')) {

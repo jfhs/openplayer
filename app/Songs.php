@@ -7,7 +7,6 @@ class Songs extends \Lib\Base\App {
 
     public function init() {
         $count = Request::get('l') ?: \Lib\Config::getInstance()->getOption('app', 'songsCount');
-        
         $this->songs = \Lib\AudioParser::search (
             Request::get('q'), 
             Request::get('offset', '0')
