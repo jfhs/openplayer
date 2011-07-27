@@ -19,65 +19,86 @@ var Playlists = {
     player_init: false,
     
     init: function() {
-    	$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
-    	$(document).resize(function() {
-    		$('.jp-progress').css("width", ($('.jp-progress').parent().width()-150));
-    	});
-    	if (!this.player_init) {
-    		this.player_init = true;
-	        $("#jquery_jplayer_1").jPlayer({
-	        	swfPath: "./web/lib",
-	        	solution: "flash, html",
-	        	supplied: "mp3",
+        $('.jp-progress').css("width", 
+            ($('.jp-progress').parent().width() - 150)
+        );
+        
+        $(document).resize(function() {
+            $('.jp-progress').css("width", 
+                ($('.jp-progress').parent().width() - 150)
+            );
+        });
+        
+        if ( !this.player_init ) {
+            this.player_init = true;
+            
+            $("#jquery_jplayer_1").jPlayer({
+                swfPath: "./web/lib",
+                solution: "flash, html",
+                supplied: "mp3",
 	
-	        	ready: function() {
-	        		//should we wait until it will say it is ready or leave it like this is ok?
-	        	},
-		        ended: function() {
-		        	var next = Playlists.prevSong.next();
-		        	if (next.size() == 0) {
-		        		if (Playlists.prevSong.parents("#opContainerSongs").size()) {
-		        			Search.loadNext(function() {
-		        				next = Playlists.prevSong.next();
-		    		        	Playlists.playSong( next );
-		        			});
-		        		}
-		        	} else {
-		        		Playlists.playSong( next );
-		        	}
-		        },
-		        pause: function() {
-		        	$(".jp-pause").hide();
-		        	$(".jp-play").show();
-		        },
-		        play: function() {
-		        	$(".jp-pause").show();
-		        	$(".jp-play").hide();
-		        },
-		        mute: function() {
-		        	$(".jp-mute").hide();
-		        	$(".jp-unmute").show();
-		        },
-		        unmute: function() {
-		        	$(".jp-mute").show();
-		        	$(".jp-unmute").hide();
-		        },
-	        });
-    	}
+                ready: function() {
+                    // should we wait until it will 
+                    // say it is ready or leave it like this is ok?
+                },
+                
+                ended: function() {
+                    var next = Playlists.prevSong.next();
+                    
+                    if ( 0 == next.size() ) {
+                        if (Playlists.prevSong.parents("#opContainerSongs").size()) {
+                            Search.loadNext(function() {
+                                next = Playlists.prevSong.next();
+                                Playlists.playSong( next );
+                            });
+                        }
+                    } else {
+                        Playlists.playSong( next );
+                    }
+                },
+                
+                pause: function() {
+                    $(".jp-pause").hide();
+                    $(".jp-play").show();
+                },
+                
+                play: function() {
+                    $(".jp-pause").show();
+                    $(".jp-play").hide();
+                },
+                
+                mute: function() {
+                    $(".jp-mute").hide();
+                    $(".jp-unmute").show();
+                },
+                
+                unmute: function() {
+                    $(".jp-mute").show();
+                    $(".jp-unmute").hide();
+                }
+            });
+        }
+        
         $(".jp-progress").hover(function() {
-        	$("#song-title").show();
+            $("#song-title").show('slow');
         }, function() {
-        	$("#song-title").hide();
+            $("#song-title").hide('slow');
         });
+        
         $("#song-title").click(function(e) {
-        	var offset;
-        	if (typeof(e.offsetX) == 'undefined') {
-        		offset = e.layerX;
-        	} else {
-        		offset = e.offsetX;
-        	}
-        	$("#jquery_jplayer_1").jPlayer("playHead", (100*offset)/$(this).width());
+            var offset;
+            
+            if ( typeof(e.offsetX) == 'undefined' ) {
+                offset = e.layerX;
+            } else {
+                offset = e.offsetX;
+            }
+            
+            $("#jquery_jplayer_1").jPlayer("playHead", 
+                (100*offset)/$(this).width()
+            );
         });
+        
         $('.op-link-song-del').unbind();
         $('.op-link-song-del').click(function() {
             if ( confirm( 'Уверен что хочешь удалить песню из плейлиста?' ) ) {
@@ -253,7 +274,7 @@ var Playlists = {
                 }
                 
             }
-		}).disableSelection();
+        }).disableSelection();
         
         $('.op-link-song-play').unbind();
         $('.op-link-song-play').click(function() {
@@ -300,7 +321,9 @@ var Playlists = {
                 if (data.url) {
                     $('.op-nowplaying').removeClass('op-nowplaying');
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');
-                    $("#jquery_jplayer_1").jPlayer("setMedia", {"mp3": data.url}).jPlayer("play");
+                    $("#jquery_jplayer_1").jPlayer("setMedia", {
+                        "mp3": data.url
+                        }).jPlayer("play");
                     var title = self.prevSong.data('artist') + ' - ' + self.prevSong.data('name');
                     $("#song-title").html(title);
                     $("title").html(title);
