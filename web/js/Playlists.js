@@ -76,18 +76,24 @@ var Playlists = {
 	        });
 	        $(".jp-shuffle").click(function() {
 	        	Playlists.shuffle = !Playlists.shuffle;
+	        	$(this).attr("title",
+	        		Playlists.shuffle?"Случайный [ВКЛ]":"Случайный [ВЫКЛ]"
+	        	);
 	        	$(this).toggleClass("enabled");
 	        });
 	        $(".jp-repeat").click(function() {
 	        	if (Playlists.repeat == Playlists.NO_REPEAT) {
 	        		Playlists.repeat = Playlists.REPEAT_PLAYLIST;
+	        		$(this).attr("title", "Повтор [ПЛЕЙЛИСТ]");
 	        		$(this).addClass("playlist");
 	        	} else if(Playlists.repeat == Playlists.REPEAT_PLAYLIST) {
 	        		Playlists.repeat = Playlists.REPEAT_SONG;
+	        		$(this).attr("title", "Повтор [ПЕСНЯ]");
 	        		$(this).removeClass("playlist");
 	        		$(this).addClass("one_song");
 	        	} else {
 	        		Playlists.repeat = Playlists.NO_REPEAT;
+	        		$(this).attr("title", "Повтор [ВЫКЛ]");
 	        		$(this).removeClass("one_song");
 	        	}
 	        });
