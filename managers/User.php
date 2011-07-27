@@ -11,25 +11,36 @@ class User extends \Lib\Base\Manager {
 		
 		return $_SESSION[ 'op' ][ User::SESS_KEY ];
 	}
-	
-	public function updatePLSettings ( $plId, $status ) {
-		$plId = intval($plId);
-		$status = 1*$status;
-		
-		$user = User::getUser();
-		$userId = intval($user->id);
+    
+    public function getHistory() {
+        return $_SESSION[ 'op' ][ User::SESS_KEY ]->settings['history'];
+    }
 
-		$settings = $user->settings;
-		
-		$settings['pl'][$plId] = $status;
-		
-		$_SESSION[ 'op' ][ User::SESS_KEY ]->settings = $settings;
-		
-		$serializedSettings = json_encode($settings);
+    public function updateSettings( $settings ) {
+        $user = User::getUser();
+		$userId = intval($user->id);
+        
+        $_SESSION[ 'op' ][ User::SESS_KEY ]->settings = $settings;
+        
+        $serializedSettings = json_encode($settings);
 		$serializedSettings = $this->pdo->quote($serializedSettings);
 		
 		$res = $this->pdo->prepare("UPDATE user SET settings = ? WHERE id = ?");
 		$res->execute(array($serializedSettings, $userId));
+        
+        return $res;
+    }
+
+
+    public function updatePLSettings ( $plId, $status ) {
+		$plId = intval($plId);
+		$status = 1*$status;
+
+		$settings = $user->settings;
+		$settings['pl'][$plId] = $status;
+		
+		$res = $this->updateSettings($settings);
+        
 		return $res;
 	}
 
@@ -120,4 +131,22 @@ class User extends \Lib\Base\Manager {
 			}
 		}
 	}
+    
+    public function logHistory( $q ) {
+        $user = User::getUser();
+        $settings = $user->settings;
+		
+		$settings['history'][] = $q;
+        
+        if ( count( $settings['history'] ) > \Lib\Config::getInstance()->getOption('app', 'historyLength') ) {
+            $settings['history'] = array_slice(
+                array_reverse($settings['history']), 
+                0, 
+                \Lib\Config::getInstance()->getOption('app', 'historyLength')
+            );
+        }
+		
+		$res = $this->updateSettings( $settings );
+    }
+        
 }

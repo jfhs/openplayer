@@ -11,10 +11,12 @@ var Search = {
     },
     
     init: function() {
-    	$('.op-form-search input[type=text]').autocomplete({
-    			minLength: 0,
-    			source: "?app=ajax&query=suggest"
-    	});
+        if ( Settings.suggest ) {
+            $('.op-form-search input[type=text]').autocomplete({
+                minLength: 0,
+                source: "?app=ajax&query=suggest"
+            });
+        }
         
         $('.op-form-search form').submit(function() {
             var data = $(this).serialize();
@@ -60,31 +62,16 @@ var Search = {
             url: './',
             data: query+'&app=ajax&query=search',
             type: 'post',
-            dataType:   'json',
 
-            success: function(data) {
-            	if (!(/offset=[0-9]+/.test(query))) {
-            		$('#opSongsPlace').html('');
-            		$('#opSongsPlace').append(data.recomendation);
-            	}
-            	if ($("#opContainerSongs").size()) {
-            		$('#opContainerSongs').append(data.songs);	
-            	} else {
-            		$('#opSongsPlace').append(data.songs);
-            	}
-            	if($("#opNextBtnContainer").size() == 0) {
-            		$("#opSongsPlace").append("<div id='opNextBtnContainer'></div>");
-            	}
-            	$("#opNextBtnContainer").html(data.next);
+            success: function(html) {
+            	$('#opSongsPlace').html(html);
+
                 Search.pagerEvents();
                 Playlists.init();
                 
                 Search.artistClick();
                 
                 Loading.off();
-                if (typeof(cb) != 'undefined') {
-                	cb();
-                }
             }
 
         });

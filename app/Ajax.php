@@ -11,6 +11,9 @@ class Ajax extends \Lib\Base\App {
     	define('AJAX', true);
         switch (Request::get('query')) {
             case 'search':
+                $userManager = new \Manager\User;
+                $userManager->logHistory( Request::get('q') );
+                
                 echo $this->render('songs');
                 die;
                 break;

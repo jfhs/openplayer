@@ -1,7 +1,9 @@
 <?php
-if (defined('AJAX')):
-	include ROOT.'/views/templates/ajax-songs.phtml';	
-else:?>
+//if (defined('AJAX')):
+	// include ROOT.'/views/templates/ajax-songs.phtml';	
+//else:?>
+
+<?php echo $this->render('history') ?>
 <?php echo $this->render('recommendation') ?>
 
 <? if ( !count($this->songs) ): ?>
@@ -24,4 +26,4 @@ else:?>
         <div id='opNextBtnContainer'><a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a></div>
     <?php endif ?>
 <?php endif; ?>
-<?php endif;?>
+<?php //endif;?>
