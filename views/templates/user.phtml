@@ -1,6 +1,6 @@
 <? if ( Manager\User::isLoggedIn() ): ?>
     
-    Ты авторизирован как <b><?= Manager\User::getUserOption('login') ?></b> &bull;
+    Ты авторизирован как <b><?php echo Manager\User::getUserOption('login') ?></b> &bull;
     <a href="javascript:" id="opLinkLogout" class="op-underline">Выйти</a>
     
 <? else: ?>

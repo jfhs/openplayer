@@ -3,23 +3,23 @@
 
     <div class="op-container-playlists">
         <? foreach ($this->playlists as $pl): ?>
-            <div data-id="<?= $pl->id ?>" class="op-playlist">
+            <div data-id="<?php echo $pl->id ?>" class="op-playlist">
                 <div class="op-playlist-header">
                     <div class="op-playlist-header-in">
                         <a href="javascript:" 
                            class="op-icons op-link-pl-openhide op-fl <? if (isset($this->user->settings['pl'][$pl->id]) && 'true' == $this->user->settings['pl'][$pl->id]): ?>op-icon-open<? else: ?>op-icon-closed<? endif ?>" 
-                           data-id="<?= $pl->id ?>">&nbsp;</a>
+                           data-id="<?php echo $pl->id ?>">&nbsp;</a>
 
-                        <span id="opLinkPlaylistName<?= $pl->id ?>">
-                            <?= $pl->name ?>
+                        <span id="opLinkPlaylistName<?php echo $pl->id ?>">
+                            <?php echo $pl->name ?>
                         </span>
 
-                        <a href="javascript:" data-id="<?= $pl->id ?>" class="op-icons op-icon-pl-del op-fr op-link-pl-del">&nbsp;</a>
-                        <a href="javascript:" data-id="<?= $pl->id ?>" class="op-icons op-icon-pl-edit op-fr op-link-pl-edit">&nbsp;</a>
+                        <a href="javascript:" data-id="<?php echo $pl->id ?>" class="op-icons op-icon-pl-del op-fr op-link-pl-del">&nbsp;</a>
+                        <a href="javascript:" data-id="<?php echo $pl->id ?>" class="op-icons op-icon-pl-edit op-fr op-link-pl-edit">&nbsp;</a>
                     </div>
                 </div>
 
-                <div id="opLinkPlaylistSongs<?= $pl->id ?>" class="op-container-songbox <? if ( isset($this->user->settings['pl'][$pl->id]) && 'true' == $this->user->settings['pl'][$pl->id]): ?>op-hide<? endif ?>">
+                <div id="opLinkPlaylistSongs<?php echo $pl->id ?>" class="op-container-songbox <? if ( isset($this->user->settings['pl'][$pl->id]) && 'true' == $this->user->settings['pl'][$pl->id]): ?>op-hide<? endif ?>">
                     <? foreach ($playlistManager->getSongs($pl->id) as $plSong): ?> 
                         <? $song = unserialize($plSong->songInfo) ?>
 

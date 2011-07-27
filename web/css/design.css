@@ -88,13 +88,6 @@ body a:hover {
     position: absolute;
 }
 
-#opAudioPlayer_wrapper {
-    position: fixed !important;
-    z-index: 1000;
-    top:0;
-    left: 0;
-}
-
 .op-placeholder-little {
     height: 16px;
 }
@@ -187,4 +180,105 @@ body a:hover {
 
 .op-underline {
     text-decoration: underline;
+}
+
+.jp-audio, .jp-interface, .jp-progress {
+	height: 22px;
+	cursor: pointer;
+}
+
+.jp-audio {
+	float: left;
+	background-color: black;
+    position: fixed !important;
+    z-index: 1000;
+    top: 1px;
+    left: 0;
+    width: 100%;
+}
+
+.jp-interface {
+	width: 100%;
+}
+
+.jp-pause, .jp-mute, .jp-play, .jp-unmute {
+	width: 20px;
+	height: 24px;
+	float: left;
+	background-repeat: none;
+}
+
+.jp-pause {
+	background-image: url("../img/player/pause.png");
+}
+
+.jp-play {
+	background-image: url("../img/player/play.png");
+	display: none;
+}
+
+.jp-mute {
+	background-image: url("../img/player/mute.png");
+}
+
+.jp-unmute {
+	background-image: url("../img/player/unmute.png");
+	display: none;
+}
+
+.jp-progress {
+	/*background-color: #555555;*/
+	float: left;
+	clear: none;
+}
+
+.jp-seek-bar {
+	background-color: #555555;
+}
+
+.jp-play-bar {
+	background-color: #A9A9A9;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: 18px;
+	margin-top: 2px;
+}
+
+.jp-volume {
+	float: right;
+	width: 120px;
+	margin-right: 5px;
+}
+
+.jp-volume-bar {
+	background-color: #A9A9A9;
+	height: 6px;
+	margin-top: 8px;
+	float: right;
+	width: 100px;
+}
+
+.jp-volume-bar-value {
+	background-color: #555555;
+	height: 4px;
+	margin-left: 1px;
+	margin-right: 1px;
+	margin-top: 1px;
+}
+
+#song-title {
+	float: left;
+	display: none;
+	z-index: 10;
+	vertical-align: middle;
+	color: white;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+#jquery_jplayer_1 {
+	height: 0px;
 }
