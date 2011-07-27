@@ -83,7 +83,7 @@ class Storage {
 	public function size() {
 		if ((strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')) {
 			if (class_exists('COM', false)) {
-				$obj = new COM ( 'scripting.filesystemobject' );
+				$obj = new \COM ( 'scripting.filesystemobject' );
 				if (is_object($obj)) {
 					$ref = $obj->getfolder ( $this->path );
 			
