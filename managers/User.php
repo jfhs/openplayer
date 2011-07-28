@@ -26,7 +26,6 @@ class User extends \Lib\Base\Manager {
 		$_SESSION[ 'op' ][ User::SESS_KEY ]->settings = $settings;
 		
 		$serializedSettings = json_encode($settings);
-		$serializedSettings = $this->pdo->quote($serializedSettings);
 		
 		$res = $this->pdo->prepare("UPDATE user SET settings = ? WHERE id = ?");
 		$res->execute(array($serializedSettings, $userId));
