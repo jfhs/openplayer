@@ -6,6 +6,7 @@ class Stat extends \Lib\Base\Manager {
     public function log( $artist ) {
         $artist = strip_tags(trim($artist));
         //$artist = $this->pdo->quote($artist);
+        $artist = substr($artist,0,32);
         
         $ip = ip2long($_SERVER['REMOTE_ADDR']);
         
