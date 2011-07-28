@@ -71,29 +71,18 @@ class AudioParser {
                 'Windows-1251'
             );
             
-//            slow down the system, doing the same
-//            
-//            $s = mb_convert_encoding(
-//                $res[1][0], 
-//                Config::getInstance()->getOption('app', 'charset'), 
-//                'Windows-1251'
-//            );
+			$s = mb_convert_encoding(
+				$res[1][0], 
+				Config::getInstance()->getOption('app', 'charset'), 
+				'Windows-1251'
+			);
 			
-//            if (preg_match('#<b>(.+?)</b>#', $s, $artist)) {
-//            	$song['artist'] = strip_tags(trim($artist[1]));
-//            }
-//            
-//            if (preg_match('#<span class="title">(.+?)</span>#', $s, $name)) {
-//            	$song['name'] = strip_tags(trim($name[1]));
-//            }
-            
-            @list(
-                $song['artist'],
-                $song['name']
-            ) = explode(
-                '-',
-                $songname
-            );
+            if (preg_match('#<b>(.+?)</b>#', $s, $artist)) {
+            	$song['artist'] = strip_tags(trim($artist[1]));
+            }
+            if (preg_match('#<span class="title">(.+?)<span class="user">#', $s, $name)) {
+            	$song['name'] = strip_tags(trim($name[1]));
+            }
 
 			if ( $config->getOption('app', 'fair_id') == 'yes' ) {
 				$headers = \Lib\Curl::get_headers($song['url'], true);

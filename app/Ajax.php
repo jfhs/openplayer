@@ -125,11 +125,12 @@ class Ajax extends \Lib\Base\App {
                 break;
             
             case 'deleteSong':
-                $path = 'web/assets/' . Request::get('id') . '.mp3';
-
-                if (file_exists($path)) {
-                    unlink($path);
-                }
+            	if (\Lib\Config::getInstance()->getOption('client', 'deleteSong')) {
+	                $path = 'web/assets/' . Request::get('id') . '.mp3';
+	                if (file_exists($path)) {
+	                    unlink($path);
+	                }
+            	}
                 die;
                 break;
 
@@ -149,9 +150,10 @@ class Ajax extends \Lib\Base\App {
                 $id = Request::get('id');
 //                $folders = "web/assets/" . \Lib\Helper::calcPath( $id ); // @todo
 //                mkdir($path, 0777, true);
-                $path = "web/assets/{$id}.mp3";
+                $path = "{$id}.mp3";
+                $storage = \Lib\Storage::getInstance();
                 
-                if ( !file_exists( $path ) ) {
+                if ( !$storage->exists( $path ) ) {
                     $url = Request::get('url');
                     
                     $headers = get_headers($url);
@@ -173,8 +175,10 @@ class Ajax extends \Lib\Base\App {
                     }
                     
                     $song = file_get_contents($url);
-                    file_put_contents($path, $song);
-                } 
+                    if ($storage->save($song, $path)) {
+                    	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
+                    }
+                }
 				
                 # stat
 				if (!isset($statManager)) {
@@ -184,7 +188,7 @@ class Ajax extends \Lib\Base\App {
 				# /stat
 				
                 echo json_encode(array(
-                    'url' => "./{$path}"
+                    'url' => "./web/assets/{$path}"
                 ));
                 die;
                 break;

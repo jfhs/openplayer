@@ -2,7 +2,7 @@
 namespace Lib;
 
 class VkLogin {
-    const COOK_PATH = 'assets/cookie';
+    const COOK_PATH = 'cookie';
 
     public static function getCookie() {
         $cookie = '';
@@ -34,7 +34,6 @@ class VkLogin {
 
     private static function vkAuth( $email, $pass ) {
         $res = Curl::process('http://vk.com/login.php?op=a_login_attempt');
-        
         if ($res <> 'vklogin') return false;
 
         $res = Curl::process(

@@ -201,11 +201,11 @@ body a:hover {
 	width: 100%;
 }
 
-.jp-pause, .jp-mute, .jp-play, .jp-unmute {
+.jp-pause, .jp-mute, .jp-play, .jp-unmute, .jp-shuffle, .jp-repeat {
 	width: 20px;
 	height: 24px;
 	float: left;
-	background-repeat: none;
+	background-repeat: no-repeat;
 }
 
 .jp-pause {
@@ -224,6 +224,28 @@ body a:hover {
 .jp-unmute {
 	background-image: url("../img/player/unmute.png");
 	display: none;
+}
+
+.jp-shuffle {
+	background-image: url("../img/player/shuffle_disabled.png");
+	width: 24px;
+}
+
+.jp-shuffle.enabled {
+	background-image: url("../img/player/shuffle.png");
+}
+
+.jp-repeat {
+	background-image: url("../img/player/repeat_disabled.png");
+	width: 24px;
+}
+
+.jp-repeat.one_song {
+	background-image: url("../img/player/repeat_one.png");
+}
+
+.jp-repeat.playlist {
+	background-image: url("../img/player/repeat.png");
 }
 
 .jp-progress {
@@ -245,10 +267,10 @@ body a:hover {
 	margin-top: 2px;
 }
 
-.jp-volume {
+.jp-right {
 	position: absolute;
-    right: 5px;
-    top: 1px;
+	right: 5px;
+	top: 1px;
 }
 
 .jp-volume-bar {

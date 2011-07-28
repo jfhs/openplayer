@@ -1,4 +1,7 @@
 <?php
+if (true) {
+	error_reporting(~E_ALL & ~E_STRICT);
+}
 session_start();
 
 define('ROOT', __DIR__);
