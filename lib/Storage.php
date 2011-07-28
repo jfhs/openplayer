@@ -7,7 +7,7 @@ class Storage {
 	private static $instance;
 	
 	private function __construct() {
-		$this->path = ROOT.'/assets/';
+		$this->path = ROOT.'/web/assets/';
 	}
 	
 	public static function getInstance() {
