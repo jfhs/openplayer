@@ -20,6 +20,8 @@ logSongs = false
 
 historyLength = 5
 
+GoogleAnalytics = "UA-17864988-4" ; Your google analytics id
+
 [storage]
 max_size	= 200
 
