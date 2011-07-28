@@ -22,6 +22,8 @@ historyLength = 5
 
 GoogleAnalytics = "UA-17864988-4" ; Your google analytics id
 
+allow_download = true ; allow to download tracks
+
 [storage]
 max_size	= 200
 
