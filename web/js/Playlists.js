@@ -53,15 +53,15 @@ var Playlists = {
 	    	$('.jp-progress').css("width", 
     			($('.jp-progress').parent().width()-25-$('.jp-right').width())
 	    	);
-	    	$(document).resize(function() {
+	    	$(window).resize(function() {
 	    		$('.jp-progress').css("width", 
 	    			($('.jp-progress').parent().width()-25-$('.jp-right').width())
 	    		);
 	    	});
 	        $(".jp-progress").hover(function() {
-	        	$("#song-title").show('slow');
+	        	$("#song-title").show();
 	        }, function() {
-	        	$("#song-title").hide('slow');
+	        	$("#song-title").hide();
 	        });
 	        $("#song-title").click(function(e) {
 	        	var offset;
