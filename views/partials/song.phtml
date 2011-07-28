@@ -22,7 +22,7 @@
                 <?php
                 $normalUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl') . "?l=1&q=".urlencode(html_entity_decode(trim($song['artist']).'-'.trim($song['name'])));
                 $url = urlencode($normalUrl);
-                $text = urlencode("{$song['artist']}-{$song['name']} #openwebplayer #nowplaying");
+                $text = urlencode(html_entity_decode($song['artist'].'-'.$song['name'])." #openwebplayer #nowplaying");
                 $via= "openwebplayer";
                 ?>
 
