@@ -12,8 +12,8 @@ var Search = {
     
     init: function() {
     	$('.op-form-search input[type=text]').autocomplete({
-    			minLength: 0,
-    			source: "?app=ajax&query=suggest"
+    		minLength: 0,
+    		source: "?app=ajax&query=suggest"
     	});
         
         $('.op-form-search form').submit(function() {
