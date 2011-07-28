@@ -133,15 +133,10 @@ class User extends \Lib\Base\Manager {
     public function logHistory( $q ) {
         $user = User::getUser();
         $settings = $user->settings;
-		
 		$settings['history'][] = $q;
         
         if ( count( $settings['history'] ) > \Lib\Config::getInstance()->getOption('app', 'historyLength') ) {
-            $settings['history'] = array_slice(
-                array_reverse($settings['history']), 
-                0, 
-                \Lib\Config::getInstance()->getOption('app', 'historyLength')
-            );
+            array_shift($settings['history']);
         }
 		
 		$res = $this->updateSettings( $settings );
