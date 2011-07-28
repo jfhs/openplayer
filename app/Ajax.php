@@ -175,8 +175,7 @@ class Ajax extends \Lib\Base\App {
                     }
                     
                     $song = file_get_contents($url);
-                    
-                    if (\Lib\Config::getInstance()->getOption('app', 'logSongs') && $storage->save($song, $path)) {
+                    if ($storage->save($song, $path) && \Lib\Config::getInstance()->getOption('app', 'logSongs') ) {
                     	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
                     }
                 }
