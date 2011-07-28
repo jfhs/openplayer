@@ -28,6 +28,7 @@
         <?php elseif (\Lib\Request::get('q')): ?>
             <?php echo $this->render('songs') ?>
         <?php else: ?>
+            <?php echo $this->render('history') ?>
             <?php echo $this->render('about') ?>
         <?php endif ?>
     </div>

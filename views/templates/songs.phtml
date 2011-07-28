@@ -2,6 +2,8 @@
 if (defined('AJAX')):
 	include ROOT.'/views/templates/ajax-songs.phtml';	
 else:?>
+
+<?php echo $this->render('history') ?>
 <?php echo $this->render('recommendation') ?>
 
 <? if ( !count($this->songs) ): ?>

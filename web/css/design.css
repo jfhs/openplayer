@@ -268,9 +268,9 @@ body a:hover {
 }
 
 .jp-right {
-	float: right;
-	width: 168px;
-	margin-right: 5px;
+	position: absolute;
+	right: 5px;
+	top: 1px;
 }
 
 .jp-volume-bar {
@@ -304,3 +304,6 @@ body a:hover {
 #jquery_jplayer_1 {
 	height: 0px;
 }
+
+
+

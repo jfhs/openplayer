@@ -18,6 +18,8 @@ suggestion_count = 5
 ; recommend to false, works bad
 logSongs = false
 
+historyLength = 5
+
 [storage]
 max_size	= 200
 
@@ -29,4 +31,4 @@ password    = "ПАРОЛЬ_ВКОНТАКТЕ"
 
 [client] ; js settings
 deleteSong = true ; delete songs from server
-
+suggest = false 
