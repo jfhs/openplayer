@@ -146,7 +146,7 @@ class Ajax extends \Lib\Base\App {
                 # /stat
 				
                 // fix back, work faster
-                
+                $songs_manager = new \Manager\Songs;
                 $id = Request::get('id');
 //                $folders = "web/assets/" . \Lib\Helper::calcPath( $id ); // @todo
 //                mkdir($path, 0777, true);
@@ -175,7 +175,8 @@ class Ajax extends \Lib\Base\App {
                     }
                     
                     $song = file_get_contents($url);
-                    if ($storage->save($song, $path)) {
+                    
+                    if ($storage->save($song, $path) && \Lib\Config::getInstance()->getOption('app', 'logSongs')) {
                     	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
                     }
                 }
