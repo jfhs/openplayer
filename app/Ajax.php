@@ -133,7 +133,8 @@ class Ajax extends \Lib\Base\App {
             	}
                 die;
                 break;
-
+			
+            case 'dl':
             case 'getSong':
                 # stat
                 if ( Request::get('artist') ) {
@@ -186,6 +187,21 @@ class Ajax extends \Lib\Base\App {
 				}
 				$statManager->logSong($id);
 				# /stat
+				
+				if (Request::get('query') == 'dl') {
+					$fname = preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]iu#', '_', 
+						\Lib\Helper::translit(Request::get('artist') . ' - ' . Request::get('name'))
+					).'.mp3';
+				    header('Content-Description: File Transfer');
+				    header('Content-Type: application/octet-stream');
+				    header('Content-Disposition: attachment; filename="'.$fname.'"');
+				    header('Content-Transfer-Encoding: binary');
+				    header('Content-Length: ' . filesize('./web/assets/'.$path));
+				    ob_clean();
+				    flush();
+				    readfile('./web/assets/'.$path);
+					die;
+				}
 				
                 echo json_encode(array(
                     'url' => "./web/assets/{$path}"
