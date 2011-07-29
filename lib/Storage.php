@@ -113,6 +113,44 @@ class Storage {
 		return $result; 
 	}
 	
+	public function findSongToDelete($size) {
+		$path = $this->path;
+	 
+	    $queue = array($path);
+	    for ($i = 0, $j = count($queue); $i < $j; ++$i)
+	    {
+	        $parent = $i;
+	        if (is_dir($queue[$i]) && $dir = @dir($queue[$i])) {
+	            $subdirs = array();
+	            while (false !== ($entry = $dir->read())) {
+	                if ($entry == '.' || $entry == '..') {
+	                    continue;
+	                }
+	                $path = $queue[$i] . $entry;
+	                if (is_dir($path)) {
+	                    $path .= DIRECTORY_SEPARATOR;
+	                    $subdirs[] = $path;
+	                } elseif (is_file($path)) {
+	                	if (filesize($path) >= $size) {
+	                		return str_replace($this->path, '', $path);
+	                	}
+	                }
+	            }
+	 
+	            unset($queue[0]);
+	            $queue = array_merge($subdirs, $queue);
+	 
+	            $i = -1;
+	            $j = count($queue);
+	 
+	            $dir->close();
+	            unset($dir);
+	        }
+	    }
+	 
+	    return false;
+	}
+	
 	public function save($data, $filename) {
 		if (!$data) {
 			return false;
@@ -122,17 +160,37 @@ class Storage {
 			$my_size = $this->size(); 
 			if (($my_size + $data_size) > $max_size) {
 				$need =  $data_size + $my_size - $max_size;
-				$songs_manager = new \Manager\Songs;
-				if ($song =  $songs_manager->findSongToDelete($need)) {
-					$this->delete($song->filename);
-					$songs_manager->updateSong($song->song_id, array('filename' => ''));
+				if (\Lib\Config::getInstance()->getOption('app', 'logSongs')) {
+					$songs_manager = new \Manager\Songs;
+					if ($song =  $songs_manager->findSongToDelete($need)) {
+						$this->delete($song->filename);
+						$songs_manager->updateSong($song->song_id, array('filename' => ''));
+					} else {
+						return false;
+					}
 				} else {
-					return false;
+					if ($song =  $this->findSongToDelete($need)) {
+						$this->delete($song);
+					} else {
+						return false;
+					}
 				}
 			}
 		}
 		file_put_contents($this->path.$filename, $data);
 		return true;
+	}
+	
+	public function make_name($filename) {
+		$dirlvls = \lib\Config::getInstance()->getOption('storage', 'dir_lvls');
+		$fname = '';
+		for($i = 0; $i < $dirlvls; $i++) {
+			$fname .= $filename[$i].DIRECTORY_SEPARATOR;
+			if (!file_exists($this->path.$fname)) {
+				mkdir($this->path.$fname);
+			}
+		}
+		return $fname.substr($filename, $dirlvls);
 	}
 	
 	public function delete($filename) {

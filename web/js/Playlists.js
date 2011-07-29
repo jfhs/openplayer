@@ -363,7 +363,11 @@ var Playlists = {
             dataType:   'json',
 
             success: function(data) {
-                if (data.url) {
+            	if (data.status == 'fail') {
+            		Playlists.next();
+            		//may be show some msg?
+            		$(par).remove();
+            	} else if (data.url) {
                     $('.op-nowplaying').removeClass('op-nowplaying');
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');
                     $("#jquery_jplayer_1").jPlayer("setMedia", {
