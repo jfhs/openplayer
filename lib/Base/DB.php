@@ -18,16 +18,19 @@ class DB {
     }
     
     private function __construct() {
-        $config = \Lib\Config::getInstance()->getOptions();
-        $config = $config['database'];
+        $options = array();
+        
+        if ( 0 == strpos(\Lib\Config::getInstance()->getOption('database', 'dsn'), 'mysql') ) {
+            $options = array(
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".\Lib\Config::getInstance()->getOption('database', 'charset')
+            );
+        }
         
         $this->pdo = new \PDO(
-            "mysql:host={$config['host']};dbname={$config['db']}", 
-            $config['user'], 
-            $config['password'],
-            array(
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$config['charset']}"
-            )
+            \Lib\Config::getInstance()->getOption('database', 'dsn'), 
+            \Lib\Config::getInstance()->getOption('database', 'user'), 
+            \Lib\Config::getInstance()->getOption('database', 'password'),
+            $options
         );
     }
     

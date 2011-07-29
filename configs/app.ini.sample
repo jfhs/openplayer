@@ -1,8 +1,7 @@
 [database]
-host        = "MYSQL_HOST"
-user        = "MYSQL_USER"
-password    = "MYSQL_PASS"
-db          = "MYSQL_DB"
+dsn         = "mysql:host=HOST;dbname=DBNAME" ; sqlite, postrge, etc...
+user        = "USER"
+password    = "PASS"
 charset     = "utf8"
 
 [app]
