@@ -20,12 +20,25 @@
 
             <span class="op-fr">
                 <?php
-                $normalUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl') . "?l=1&q=".urlencode(trim($song['artist']).'-'.trim($song['name']));
+                $normalUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl') . "?l=1&q=".urlencode(html_entity_decode(trim($song['artist']).'-'.trim($song['name'])));
                 $url = urlencode($normalUrl);
-                $text = urlencode("{$song['artist']}-{$song['name']} #openwebplayer #nowplaying");
+                $text = urlencode(html_entity_decode($song['artist'].'-'.$song['name'])." #openwebplayer #nowplaying");
                 $via= "openwebplayer";
                 ?>
-
+				<?php
+				if (Lib\Config::getInstance()->getOption('app', 'allow_download')):
+					$q = http_build_query(array(
+						'app' => 'ajax',
+						'query' => 'dl',
+						'artist' => html_entity_decode(trim($song['artist'])),
+						'name' => html_entity_decode(trim($song['name'])),
+						'id' => $song['id'],
+						'url' => $song['url'],
+					));
+					$dlUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl').'?'.$q;
+				?>
+				<a title="Скачать" class="op-icons op-icon-download" href="<?php echo $dlUrl?>"></a>
+				<?php endif;?>
                 <a title="Ссылка на трек" class="op-icons op-icon-link" href="javascript:" onclick="prompt('Ссылка на трек', '<?php echo$normalUrl?>')">&nbsp;</a>
                 |
                 <a title="Твитнуть" class="op-icons op-icon-twitter" target="_blank" href="http://twitter.com/share?via=<?php echo $via?>&url=<?php echo$url?>&text=<?php echo $text?>">&nbsp;</a>

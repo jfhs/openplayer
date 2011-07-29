@@ -21,8 +21,11 @@ historyLength = 5
 
 GoogleAnalytics = "UA-17864988-4" ; Your google analytics id
 
+allow_download = true ; allow to download tracks
+
 [storage]
 max_size	= 200
+dir_lvls	= 3 ; сколько уровней подпапок создавать для хранения музыки
 
 [vk]
 userAgent   = "Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 ( .NET CLR 3.5.30729)"

@@ -133,7 +133,8 @@ class Ajax extends \Lib\Base\App {
             	}
                 die;
                 break;
-
+			
+            case 'dl':
             case 'getSong':
                 # stat
                 if ( Request::get('artist') ) {
@@ -149,10 +150,10 @@ class Ajax extends \Lib\Base\App {
                 $songs_manager = new \Manager\Songs;
                 $id = Request::get('id');
 //                $folders = "web/assets/" . \Lib\Helper::calcPath( $id ); // @todo
-//                mkdir($path, 0777, true);
-                $path = "{$id}.mp3";
+//                mkdir($path, 0777, true);                
                 $storage = \Lib\Storage::getInstance();
-                
+               	$path = $storage->make_name("{$id}.mp3"); 
+               	$result = true;
                 if ( !$storage->exists( $path ) ) {
                     $url = Request::get('url');
                     
@@ -175,20 +176,38 @@ class Ajax extends \Lib\Base\App {
                     }
                     
                     $song = file_get_contents($url);
-                    if ($storage->save($song, $path) && \Lib\Config::getInstance()->getOption('app', 'logSongs') ) {
+                    if (($result = $storage->save($song, $path)) && \Lib\Config::getInstance()->getOption('app', 'logSongs') ) {
                     	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
                     }
                 }
 				
                 # stat
-				if (!isset($statManager)) {
-					$statManager = new \Manager\Stat; 
-				}
-				$statManager->logSong($id);
+                if (\Lib\Config::getInstance()->getOption('app', 'logSongs')) {
+					if (!isset($statManager)) {
+						$statManager = new \Manager\Stat; 
+					}
+					$statManager->logSong($id);
+                }
 				# /stat
 				
+				if (Request::get('query') == 'dl') {
+					$fname = preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]iu#', '_', 
+						\Lib\Helper::translit(Request::get('artist') . ' - ' . Request::get('name'))
+					).'.mp3';
+				    header('Content-Description: File Transfer');
+				    header('Content-Type: application/octet-stream');
+				    header('Content-Disposition: attachment; filename="'.$fname.'"');
+				    header('Content-Transfer-Encoding: binary');
+				    header('Content-Length: ' . filesize('./web/assets/'.$path));
+				    ob_clean();
+				    flush();
+				    readfile('./web/assets/'.$path);
+					die;
+				}
+				
                 echo json_encode(array(
-                    'url' => "./web/assets/{$path}"
+                    'url' => "./web/assets/{$path}",
+                	'status' => $result?'ok':'fail',
                 ));
                 die;
                 break;
