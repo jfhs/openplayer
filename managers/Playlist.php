@@ -167,10 +167,10 @@ class Playlist extends \Lib\Base\Manager {
     private function getSongPosition( $songId, $plId ) {
         $plId = intval($plId);
         
-        $q = "SELECT * FROM pl_song WHERE songId = {$songId} AND plId = $plId";
-        $res = $this->pdo->query( $q );
+        $q = "SELECT * FROM pl_song WHERE songId = ? AND plId = ?";
+        $res = $this->pdo->prepare($q);
         
-        if (!$res) return 0;
+        if (!$res->execute(array($songId, $plId))) return 0;
         
         return ($res->fetchObject()->position) * 1;
     }
