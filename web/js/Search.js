@@ -73,6 +73,7 @@ var Search = {
                 $('#opSongsPlace').html(html);
                 
                 Search.pagerEvents();
+                Search.artistClick();
                 
                 Playlists.init();
                 
