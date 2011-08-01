@@ -16,6 +16,7 @@
 
                         <a href="javascript:" data-id="<?php echo $pl->id ?>" class="op-icons op-icon-pl-del op-fr op-link-pl-del">&nbsp;</a>
                         <a href="javascript:" data-id="<?php echo $pl->id ?>" class="op-icons op-icon-pl-edit op-fr op-link-pl-edit">&nbsp;</a>
+                        <a href="<?php echo \Lib\Config::getInstance()->getOption('app', 'baseUrl').'?app=download&query=m3u&plId='.$pl->id?>" title="Скачать m3u" class="op-icons op-icon-pl-download op-fr">&nbsp;</a>
                     </div>
                 </div>
 
