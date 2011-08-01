@@ -1,7 +1,7 @@
 [database]
 ;dsn (http://pear.php.net/manual/en/package.database.db.intro-dsn.php)
 ;examples:
-;  MySQL  (mysql:host=host;dbname=dbname)
+;  MySQL  (mysql:host=HOST;dbname=DBNAME)
 ;  SQLite (sqlite:/path/to/db.sq3)
 ;  ...
 dsn         = "mysql:host=HOST;dbname=DBNAME"
@@ -39,6 +39,8 @@ allow_download = true
 [storage]
 ; Directory levels
 dir_lvls	= 0
+; Max size
+max_size    = 200
 
 
 [vk]

@@ -404,10 +404,10 @@ var Playlists = {
             dataType:   'json',
 
             success: function(data) {
-            	if (data.status == 'fail') {
+            	if ( !data.status ) {
             		Playlists.next();
             		//may be show some msg?
-            		$(par).remove();
+//            		$(par).remove();
             	} else if (data.url) {
                     $('.op-nowplaying').removeClass('op-nowplaying');
                     $('.op-song[data-id='+$(par).data('id')+']').addClass('op-nowplaying');

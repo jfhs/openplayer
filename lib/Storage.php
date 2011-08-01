@@ -10,6 +10,10 @@ class Storage {
 		$this->path = ROOT.'/web/assets/';
 	}
 	
+    /**
+     *
+     * @return Storage
+     */
 	public static function getInstance() {
 		return self::$instance?self::$instance:self::$instance = new \Lib\Storage;
 	}
@@ -150,20 +154,20 @@ class Storage {
 	 
 	    return false;
 	}
-	// Работает неправильно, удаляет существующие треки. 
-    // Ссылка на песню будет дохнуть всегда, так как, она временная
+    
 	public function save($data, $filename) {
-		if (!$data) {
+		if ( !$data ) {
 			return false;
 		}
-		if (false && $max_size = Config::getInstance()->getOption('storage', 'max_size')*1024*1024) {
+        
+		if ($max_size = Config::getInstance()->getOption('storage', 'max_size')*1024*1024) {
 			$data_size = strlen($data);
 			$my_size = $this->size(); 
 			if (($my_size + $data_size) > $max_size) {
 				$need =  $data_size + $my_size - $max_size;
 				if (\Lib\Config::getInstance()->getOption('app', 'logSongs')) {
 					$songs_manager = new \Manager\Songs;
-					if ($song =  $songs_manager->findSongToDelete($need)) {
+					if ($song = $songs_manager->findSongToDelete($need)) {
 						$this->delete($song->filename);
 						$songs_manager->updateSong($song->song_id, array('filename' => ''));
 					} else {
@@ -179,11 +183,12 @@ class Storage {
 			}
 		}
         
-		file_put_contents($this->path.$filename, $data);
+		file_put_contents( $this->path . $filename, $data );
+        
 		return true;
 	}
 	
-	public function make_name($filename) {
+	public function makeName($filename) {
 		$dirlvls = \lib\Config::getInstance()->getOption('storage', 'dir_lvls');
 		$fname = '';
 		for($i = 0; $i < $dirlvls; $i++) {
