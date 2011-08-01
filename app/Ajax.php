@@ -1,7 +1,9 @@
 <?php
 namespace App;
 
-use \Lib\Request,
+use \Lib\Helper,
+	\Lib\Request,
+	\Lib\Response,
     \Manager\Playlist,
     \Manager\User,
     \Manager\Suggest;
@@ -191,18 +193,14 @@ class Ajax extends \Lib\Base\App {
 				# /stat
 				
 				if (Request::get('query') == 'dl') {
-					$fname = preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]#i', '_', 
-						\Lib\Helper::translit(Request::get('artist') . ' - ' . Request::get('name'))
+					$fname = Helper::makeValidFname(
+						Request::get('artist') . ' - ' . Request::get('name')
 					).'.mp3';
-				    header('Content-Description: File Transfer');
-				    header('Content-Type: application/octet-stream');
-				    header('Content-Disposition: attachment; filename="'.$fname.'"');
-				    header('Content-Transfer-Encoding: binary');
-				    header('Content-Length: ' . filesize('./web/assets/'.$path));
-				    ob_clean();
-				    flush();
-				    readfile('./web/assets/'.$path);
-					die;
+					$path = './web/assets/'.$path;
+					Response::sendfile(array(
+						'filepath' => $path,
+						'filename' => $fname,
+					));
 				}
 				
                 echo json_encode(array(
