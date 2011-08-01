@@ -191,7 +191,7 @@ class Ajax extends \Lib\Base\App {
 				# /stat
 				
 				if (Request::get('query') == 'dl') {
-					$fname = preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]iu#', '_', 
+					$fname = preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]#i', '_', 
 						\Lib\Helper::translit(Request::get('artist') . ' - ' . Request::get('name'))
 					).'.mp3';
 				    header('Content-Description: File Transfer');
