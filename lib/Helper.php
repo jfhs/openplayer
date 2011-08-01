@@ -44,4 +44,18 @@ class Helper {
 	public static function translit($name) {
 		return strtr($name, self::$translit_arr);
 	}
+	
+	public static function convertDuration($dur) {
+		$l = explode(':', $dur);
+		if (count($l) == 2) {
+			return intval($l[0])*60+intval($l[1]);
+		}
+		return -1;
+	}
+	
+	public static function makeValidFname($filename) {
+		return preg_replace('#[^a-z0-9\.\-\_\(\)\[\]]#i', '_', 
+			self::translit($filename)
+		);
+	}
 }
