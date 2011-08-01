@@ -19,6 +19,19 @@ class Playlist extends \Lib\Base\Manager {
         
         return $res->fetchAll( \PDO::FETCH_OBJ );
     }
+    
+    public function getPlaylist($plId) {
+        $plId = intval($plId);
+        
+        $q = "SELECT * FROM pl WHERE id = {$plId}";
+        $res = $this->pdo->query( $q );
+
+        if ( !$res ) {
+            return null;
+        }
+        
+        return $res->fetch( \PDO::FETCH_OBJ );
+    }
 
     public function getSongs( $plId ) {
         $plId = intval($plId);
