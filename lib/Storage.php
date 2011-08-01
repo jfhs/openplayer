@@ -150,12 +150,13 @@ class Storage {
 	 
 	    return false;
 	}
-	
+	// Работает неправильно, удаляет существующие треки. 
+    // Ссылка на песню будет дохнуть всегда, так как, она временная
 	public function save($data, $filename) {
 		if (!$data) {
 			return false;
 		}
-		if ($max_size = Config::getInstance()->getOption('storage', 'max_size')*1024*1024) {
+		if (false && $max_size = Config::getInstance()->getOption('storage', 'max_size')*1024*1024) {
 			$data_size = strlen($data);
 			$my_size = $this->size(); 
 			if (($my_size + $data_size) > $max_size) {
@@ -177,6 +178,7 @@ class Storage {
 				}
 			}
 		}
+        
 		file_put_contents($this->path.$filename, $data);
 		return true;
 	}

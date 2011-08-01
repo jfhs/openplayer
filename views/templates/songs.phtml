@@ -1,29 +1,21 @@
-<?php
-if (defined('AJAX')):
-	include ROOT.'/views/templates/ajax-songs.phtml';	
-else:?>
+<?php $q = \Lib\Request::get('q') ?>
+<?php $offset = \Lib\Request::get('offset') ?>
+<?php $songsCount = \Lib\Config::getInstance()->getOption('app', 'songsCount') ?>
 
-<?php echo $this->render('history') ?>
-<?php echo $this->render('recommendation') ?>
-
-<? if ( !count($this->songs) ): ?>
-    Ничего не найдено.
-<? else: ?>
-    
+<?php if ( !\Lib\Request::get('short') ): ?> 
     <div class="op-container-songbox op-container-songs" id="opContainerSongs">
-        <?php foreach ($this->songs as $song): ?>
-            <?php $path = $song['url'] ?>
-            <?php $plId = 0 ?>
-
-            <? require ROOT . '/views/partials/song.phtml' ?>
-        <?php endforeach ?>
+        <?php require ROOT . '/views/templates/_songs.phtml' ?>
     </div>
 
-    <?php if (! \Lib\Request::get('l') ): ?> 
-        <?php if (\Lib\Request::get('offset')): ?> 
-            <a id="opPagerSongsPrev" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') - \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Предыдущие</a>
+    <?php if ( !\Lib\Request::get('l') ): ?> 
+        <?php if ( $offset ): ?> 
+            <a id="opPagerSongsPrev" href="?q=<?php echo urlencode($q) ?><?php /*&offset=<?php echo ($offset - $songsCount) */?>">&laquo; Предыдущие</a>
         <?php endif ?>
-        <div id='opNextBtnContainer'><a id="opPagerSongsNext" href="?q=<?php echo urlencode(\Lib\Request::get('q')) ?>&offset=<?php echo (\Lib\Request::get('offset') + \Lib\Config::getInstance()->getOption('app', 'songsCount')) ?>">Еще...</a></div>
+        
+        <?php if (count($this->songs) >= $songsCount): ?>
+            <a id="opPagerSongsNext" href="?q=<?php echo urlencode($q) ?>&offset=<?php echo ($offset + $songsCount) ?>">Следующие &raquo;</a>
+        <?php endif ?>
     <?php endif ?>
-<?php endif; ?>
-<?php endif;?>
+<?php else: ?>
+    <?php require ROOT . '/views/templates/_songs.phtml' ?>
+<?php endif ?>

@@ -2,6 +2,14 @@
 namespace Lib;
 
 class Helper {
+    public static function getArr(array $arr, $key) {
+        if ( is_array($arr) && $arr && isset( $arr[$key] ) ) {
+            return $arr[$key];
+        }
+        
+        return null;
+    }
+
 	const FOLDER_LEN = 8;
 
 	public static function calcPath( $id ) {
@@ -25,6 +33,7 @@ class Helper {
 			return $id;
 		}
 	}
+    
 	private static $translit_arr = array(
         "А"=>"A","Б"=>"B","В"=>"V","Г"=>"G",
         "Д"=>"D","Е"=>"E","Ж"=>"J","З"=>"Z","И"=>"I",

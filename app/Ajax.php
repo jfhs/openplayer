@@ -11,8 +11,10 @@ class Ajax extends \Lib\Base\App {
     	define('AJAX', true);
         switch (Request::get('query')) {
             case 'search':
-                $userManager = new \Manager\User;
-                $userManager->logHistory( Request::get('q') );
+                if ( !Request::get('offset') ) {
+                    \Manager\User::create()
+                        ->logHistory( Request::get('q') );
+                }
                 
                 echo $this->render('songs');
                 die;
@@ -126,9 +128,11 @@ class Ajax extends \Lib\Base\App {
             
             case 'deleteSong':
             	if (\Lib\Config::getInstance()->getOption('client', 'deleteSong')) {
-	                $path = 'web/assets/' . Request::get('id') . '.mp3';
-	                if (file_exists($path)) {
-	                    unlink($path);
+                    $storage = \Lib\Storage::getInstance();
+                    $path = $storage->make_name(Request::get('id').".mp3"); 
+                    
+                    if ( !$storage->exists( $path ) ) {
+	                    $storage->delete( $path );
 	                }
             	}
                 die;

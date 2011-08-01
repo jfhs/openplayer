@@ -11,10 +11,12 @@ var Search = {
     },
     
     init: function() {
-    	$('.op-form-search input[type=text]').autocomplete({
-    		minLength: 0,
-    		source: "?app=ajax&query=suggest"
-    	});
+        if ( Settings.suggest ) {
+            $('.op-form-search input[type=text]').autocomplete({
+                minLength: 0,
+                source: "?app=ajax&query=suggest"
+            });
+        }
         
         $('.op-form-search form').submit(function() {
             var data = $(this).serialize();
@@ -34,11 +36,13 @@ var Search = {
     },
     
     pagerEvents: function() {
+        $('#opPagerSongsPrev').unbind();
         $('#opPagerSongsPrev').click(function() {
             Search.loadSongs($(this).attr('href').replace('?',''));
             return false;
         });
         
+        $('#opPagerSongsNext').unbind();
         $('#opPagerSongsNext').click(function() {
             Search.loadSongs($(this).attr('href').replace('?',''));
             return false;
@@ -46,7 +50,10 @@ var Search = {
     },
     
     loadNext: function(cb) {
-        Search.loadSongs($('#opPagerSongsNext').attr('href').replace('?',''), cb);
+        Search.loadSongs(
+            $('#opPagerSongsNext').attr('href').replace('?',''), 
+            cb
+        );
     },
     
     loadSongs: function(data, cb) {
@@ -60,9 +67,22 @@ var Search = {
             url: './',
             data: query+'&app=ajax&query=search',
             type: 'post',
-            dataType:   'json',
+//            dataType:   'json',
 
-            success: function(data) {
+            success: function(html) {
+                $('#opSongsPlace').html(html);
+                
+                Search.pagerEvents();
+                
+                Playlists.init();
+                
+                if (typeof(cb) != 'undefined') {
+                	cb();
+                }
+                
+                Loading.off();
+                /*
+                
             	if (!(/offset=[0-9]+/.test(query))) {
             		$('#opSongsPlace').html('');
             		$('#opSongsPlace').append(data.recomendation);
@@ -85,6 +105,7 @@ var Search = {
                 if (typeof(cb) != 'undefined') {
                 	cb();
                 }
+                */
             }
 
         });
