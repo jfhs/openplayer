@@ -135,6 +135,8 @@ class User extends \Lib\Base\Manager {
     
     public function logHistory( $q ) {
         $user = User::getUser();
+        if ( !$user ) return false;
+        
         $settings = $user->settings;
         
         if ( count( \Lib\Helper::getArr($settings, 'history') ) > \Lib\Config::getInstance()->getOption('app', 'historyLength') - 1 ) {
