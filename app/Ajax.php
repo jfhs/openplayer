@@ -157,6 +157,8 @@ class Ajax extends \Lib\Base\App {
                 $storage = \Lib\Storage::getInstance();
                	$path = $storage->makeName("{$id}.mp3"); 
                 
+               	$result = true;
+               	
                 if ( !$storage->exists( $path ) ) {
                     $url = Request::get('url');
                     
