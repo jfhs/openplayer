@@ -1,0 +1,13 @@
+<?php echo $this->render('history') ?>
+<?php echo $this->render('recommendation') ?>
+
+<?php if ( !count($this->songs) ): ?>
+    Ничего не найдено.
+<?php else: ?>
+    <?php foreach ($this->songs as $song): ?>
+        <?php $path = $song['url'] ?>
+        <?php $plId = 0 ?>
+
+        <?php require ROOT . '/views/partials/song.phtml' ?>
+    <?php endforeach ?>
+<?php endif ?>

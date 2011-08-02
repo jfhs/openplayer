@@ -2,25 +2,28 @@
 namespace Manager;
 
 class User extends \Lib\Base\Manager {
+	const SESS_NS = 'op';
 	const SESS_KEY = 'user';
 
 	public static function getUser() {
-		if ( !isset($_SESSION[ 'op' ]) ) {
+		if ( !isset($_SESSION[ User::SESS_NS ]) ) {
 			return false;
 		}
 		
-		return $_SESSION[ 'op' ][ User::SESS_KEY ];
+		return $_SESSION[ User::SESS_NS ][ User::SESS_KEY ];
 	}
     
     public function getHistory() {
-        return $_SESSION[ 'op' ][ User::SESS_KEY ]->settings['history'];
+        if ( !$this->getUser() ) return array();
+        
+        return \Lib\Helper::getArr($_SESSION[ User::SESS_NS ][ User::SESS_KEY ]->settings, 'history');
     }
 
     public function updateSettings( $settings ) {
         $user = User::getUser();
 		$userId = intval($user->id);
         
-        $_SESSION[ 'op' ][ User::SESS_KEY ]->settings = $settings;
+        $_SESSION[ User::SESS_NS ][ User::SESS_KEY ]->settings = $settings;
         
         $serializedSettings = json_encode($settings);
 		
@@ -96,7 +99,7 @@ class User extends \Lib\Base\Manager {
 		$user->settings = (array) json_decode($user->settings);
 		@$user->settings['pl'] = (array) $user->settings['pl'];
 		
-		return $_SESSION[ 'op' ][ User::SESS_KEY ] = $user;
+		return $_SESSION[ User::SESS_NS ][ User::SESS_KEY ] = $user;
 	}
 	
 	private function generateSessionKey( $user ) {
@@ -112,7 +115,7 @@ class User extends \Lib\Base\Manager {
 
 
 	public function logout() {
-		unset($_SESSION['op']);
+		unset($_SESSION[ User::SESS_NS ]);
 		setcookie('sessionKey', null, time() , '/');
 	}
 	
@@ -132,9 +135,11 @@ class User extends \Lib\Base\Manager {
     
     public function logHistory( $q ) {
         $user = User::getUser();
+        if ( !$user ) return false;
+        
         $settings = $user->settings;
         
-        if ( count( $settings['history'] ) > \Lib\Config::getInstance()->getOption('app', 'historyLength') - 1 ) {
+        if ( count( \Lib\Helper::getArr($settings, 'history') ) > \Lib\Config::getInstance()->getOption('app', 'historyLength') - 1 ) {
             array_shift($settings['history']);
         }
         

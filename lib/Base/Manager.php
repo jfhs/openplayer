@@ -13,7 +13,8 @@ class Manager {
     }
     
     public static function create() {
-        return new self;
+        $className = get_called_class();
+        return new $className;
     }
 
 

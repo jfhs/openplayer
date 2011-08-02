@@ -13,8 +13,10 @@ class Ajax extends \Lib\Base\App {
     	define('AJAX', true);
         switch (Request::get('query')) {
             case 'search':
-                $userManager = new \Manager\User;
-                $userManager->logHistory( Request::get('q') );
+                if ( !Request::get('offset') ) {
+                    \Manager\User::create()
+                        ->logHistory( Request::get('q') );
+                }
                 
                 echo $this->render('songs');
                 die;
@@ -128,9 +130,11 @@ class Ajax extends \Lib\Base\App {
             
             case 'deleteSong':
             	if (\Lib\Config::getInstance()->getOption('client', 'deleteSong')) {
-	                $path = 'web/assets/' . Request::get('id') . '.mp3';
-	                if (file_exists($path)) {
-	                    unlink($path);
+                    $storage = \Lib\Storage::getInstance();
+                    $path = $storage->makeName(Request::get('id').".mp3"); 
+                    
+                    if ( !$storage->exists( $path ) ) {
+	                    $storage->delete( $path );
 	                }
             	}
                 die;
@@ -148,14 +152,11 @@ class Ajax extends \Lib\Base\App {
                 }
                 # /stat
 				
-                // fix back, work faster
-                $songs_manager = new \Manager\Songs;
                 $id = Request::get('id');
-//                $folders = "web/assets/" . \Lib\Helper::calcPath( $id ); // @todo
-//                mkdir($path, 0777, true);                
+                
                 $storage = \Lib\Storage::getInstance();
-               	$path = $storage->make_name("{$id}.mp3"); 
-               	$result = true;
+               	$path = $storage->makeName("{$id}.mp3"); 
+                
                 if ( !$storage->exists( $path ) ) {
                     $url = Request::get('url');
                     
@@ -163,14 +164,14 @@ class Ajax extends \Lib\Base\App {
                     $status = substr($headers[0], 9, 3);
                     
                     if ('404' == $status) {
-                        $song = reset(\Lib\AudioParser::search(
+                        $song = reset(\Lib\AudioParser::search (
                             Request::get('artist') . ' - ' . Request::get('name')
                         ));
 
                         $url = $song['url'];
                         $playlistsManager = new Playlist;
                         $playlistsManager->updateSongInfo(
-                            Request::get('id'), 
+                            $id, 
                             array(
                                 'url' => $url
                             )
@@ -178,16 +179,27 @@ class Ajax extends \Lib\Base\App {
                     }
                     
                     $song = file_get_contents($url);
-                    if (($result = $storage->save($song, $path)) && \Lib\Config::getInstance()->getOption('app', 'logSongs') ) {
-                    	$songs_manager->updateSong($id, array('filename' => $path, 'size' => strlen($song)));
+                    $result = $storage->save($song, $path);
+                    
+                    if ( $result && \Lib\Config::getInstance()->getOption('app', 'logSongs') ) {
+                        $songsManager = new \Manager\Songs;
+                        
+                    	$songsManager->updateSong(
+                            $id, 
+                            array(
+                                'filename' => $path, 
+                                'size' => strlen($song)
+                            )
+                        );
                     }
                 }
 				
                 # stat
-                if (\Lib\Config::getInstance()->getOption('app', 'logSongs')) {
-					if (!isset($statManager)) {
+                if ( \Lib\Config::getInstance()->getOption( 'app', 'logSongs' ) ) {
+					if ( !isset($statManager) ) {
 						$statManager = new \Manager\Stat; 
 					}
+                    
 					$statManager->logSong($id);
                 }
 				# /stat
@@ -205,7 +217,7 @@ class Ajax extends \Lib\Base\App {
 				
                 echo json_encode(array(
                     'url' => "./web/assets/{$path}",
-                	'status' => $result?'ok':'fail',
+                	'status' => $result
                 ));
                 die;
                 break;
