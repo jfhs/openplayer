@@ -12,7 +12,7 @@ class Download extends \Lib\Base\App {
 	
 	public function init() {
 		$q = Request::get('query');
-		if ($q == 'm3u') {
+		if ($q == 'm3u' && Config::getInstance()->getOption('app', 'allow_download')) {
 			$plId = Request::get('plId');
 			$pl = new Playlist();
 			if (!($playlist = $pl->getPlaylist($plId))) {
@@ -40,7 +40,6 @@ class Download extends \Lib\Base\App {
 					"\r\n".$dlUrl."\r\n";
 			}
 			$fname = Helper::makeValidFname($playlist->name.'.m3u');
-			echo '123';
 			Response::sendfile(array(
 				'content' => $ret,
 				'filename' => $fname,
