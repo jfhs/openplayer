@@ -27,7 +27,7 @@
                 ?>
 				<?php
 				if (Lib\Config::getInstance()->getOption('app', 'allow_download')):
-					$q = http_build_query(array(
+					$_q = http_build_query(array(
 						'app' => 'ajax',
 						'query' => 'dl',
 						'artist' => html_entity_decode(trim($song['artist'])),
@@ -35,7 +35,7 @@
 						'id' => $song['id'],
 						'url' => $song['url'],
 					));
-					$dlUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl').'?'.$q;
+					$dlUrl = Lib\Config::getInstance()->getOption('app', 'baseUrl').'?'.$_q;
 				?>
 				<a title="Скачать" class="op-icons op-icon-download" href="<?php echo $dlUrl?>"></a>
 				<?php endif;?>

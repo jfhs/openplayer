@@ -19,6 +19,19 @@ class Playlist extends \Lib\Base\Manager {
         
         return $res->fetchAll( \PDO::FETCH_OBJ );
     }
+    
+    public function getPlaylist($plId) {
+        $plId = intval($plId);
+        
+        $q = "SELECT * FROM pl WHERE id = {$plId}";
+        $res = $this->pdo->query( $q );
+
+        if ( !$res ) {
+            return null;
+        }
+        
+        return $res->fetch( \PDO::FETCH_OBJ );
+    }
 
     public function getSongs( $plId ) {
         $plId = intval($plId);
@@ -167,10 +180,10 @@ class Playlist extends \Lib\Base\Manager {
     private function getSongPosition( $songId, $plId ) {
         $plId = intval($plId);
         
-        $q = "SELECT * FROM pl_song WHERE songId = {$songId} AND plId = $plId";
-        $res = $this->pdo->query( $q );
+        $q = "SELECT * FROM pl_song WHERE songId = ? AND plId = ?";
+        $res = $this->pdo->prepare($q);
         
-        if (!$res) return 0;
+        if (!$res->execute(array($songId, $plId))) return 0;
         
         return ($res->fetchObject()->position) * 1;
     }
