@@ -18,6 +18,17 @@
     <?php echo $this->render('user') ?>
 </div>
 
+<script type="text/javascript">
+    $(function() {
+	var offset = $("#opContainerPlaylists").offset();
+	var topPadding = 50;
+	$(window).scroll(function() {
+	if ($(window).scrollTop() > offset.top) {
+	      $("#opContainerPlaylists").stop().animate({marginTop: $(window).scrollTop() - offset.top + topPadding});}
+	else {$("#opContainerPlaylists").stop().animate({marginTop: 0});};});
+	});
+</script>
+
 <div class="op-container-main">
     <div style="width: 100%">
         <?php echo $this->render('search') ?>
