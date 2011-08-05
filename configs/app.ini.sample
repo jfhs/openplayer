@@ -42,6 +42,8 @@ availableLangs[] = "ru"
 availableLangs[] = "ua"
 availableLangs[] = "en"
 
+; sliding playlist
+slidingPlaylist = false
 
 [storage]
 ; Directory levels
