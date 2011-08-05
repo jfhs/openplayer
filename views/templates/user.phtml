@@ -1,13 +1,17 @@
 <? if ( Manager\User::isLoggedIn() ): ?>
-    
-    Ты авторизирован как <b><?php echo Manager\User::getUserOption('login') ?></b> &bull;
-    <a href="javascript:" id="opLinkLogout" class="op-underline">Выйти</a>
-    
+    <?php echo __('Logged in as') ?> <b><?php echo Manager\User::getUserOption('login') ?></b> &bull;
+    <a href="javascript:" id="opLinkLogout" class="op-underline"><?php echo __('Exit') ?></a>
 <? else: ?>
-    
     <?php require ROOT . '/views/partials/auth.phtml' ?>
-    <a href="javascript:" id="opLinkLogin" class="op-underline">Авторизироваться</a>
-    
+    <a href="javascript:" id="opLinkLogin" class="op-underline"><?php echo __('Authorise') ?></a>
 <? endif ?>
 
+|
+
+<?php $langs = Lib\Config::getInstance()->getOption('app', 'availableLangs', array()) ?>
+
+<?php foreach ($langs as $lang): ?>
+    <a class="op-underline" href="./?app=lang&lang=<?php echo $lang ?>"><?php echo __($lang) ?></a>
+<?php endforeach ?>    
+    
 <script src="web/js/User.js" type="text/javascript"></script>

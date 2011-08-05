@@ -1,8 +1,8 @@
 <?php
 session_start();
-
 define('ROOT', __DIR__);
 
+# autoload
 function classLoad( $className ) {
     $namespaces = array(
         "Lib" => "lib",
@@ -26,9 +26,24 @@ function classLoad( $className ) {
 }
 
 spl_autoload_register("classLoad");
+# /autoload
 
+
+# i18n
+Lib\Lang::init();
+
+function __ ( $word ) {
+    return isset( Lib\Lang::$translate[$word] )
+        ? Lib\Lang::$translate[$word]
+        : $word;
+}
+# /i18n
+
+
+# app init
 $app = strtolower( Lib\Request::get('app', 'index') );
 
 $appClass = "App\\".ucfirst($app);
 $appObj = new $appClass;
 $appObj->run( $app );
+# /app init

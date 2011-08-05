@@ -90,8 +90,8 @@ var Playlists = {
 	        	$(this).attr(
                     "title",
 	        		Playlists.shuffle
-                        ? "Случайный [ВКЛ]"
-                        : "Случайный [ВЫКЛ]"
+                        ? Lang.__('Shuffle [ON]')
+                        : Lang.__('Shuffle [OFF]')
 	        	);
 	        	$(this).toggleClass("enabled");
 	        });
@@ -99,16 +99,16 @@ var Playlists = {
 	        $(".jp-repeat").click(function() {
 	        	if (Playlists.repeat == Playlists.NO_REPEAT) {
 	        		Playlists.repeat = Playlists.REPEAT_PLAYLIST;
-	        		$(this).attr("title", "Повтор [ПЛЕЙЛИСТ]");
+	        		$(this).attr("title", Lang.__('Repeat [PLAYLIST]'));
 	        		$(this).addClass("playlist");
 	        	} else if(Playlists.repeat == Playlists.REPEAT_PLAYLIST) {
 	        		Playlists.repeat = Playlists.REPEAT_SONG;
-	        		$(this).attr("title", "Повтор [ПЕСНЯ]");
+	        		$(this).attr("title", Lang.__('Repeat [SONG]'));
 	        		$(this).removeClass("playlist");
 	        		$(this).addClass("one_song");
 	        	} else {
 	        		Playlists.repeat = Playlists.NO_REPEAT;
-	        		$(this).attr("title", "Повтор [ВЫКЛ]");
+	        		$(this).attr("title", Lang.__('Repeat [OFF]'));
 	        		$(this).removeClass("one_song");
 	        	}
 	        });
@@ -116,7 +116,7 @@ var Playlists = {
         
         $('.op-link-song-del').unbind();
         $('.op-link-song-del').click(function() {
-            if ( confirm( 'Уверен что хочешь удалить песню из плейлиста?' ) ) {
+            if ( confirm( Lang.__('Sure you want delete song from playlist?') ) ) {
                 var id = $(this).data('id');
                 var plId = $(this).data('plid');
                 
@@ -141,7 +141,7 @@ var Playlists = {
             var id = $(this).data('id');
             
             var name = prompt( 
-                'Введи новое имя для плейлиста', 
+                Lang.__('Input playlist new name'), 
                 $( '#opLinkPlaylistName' + id ).html().trim()
             );
 
@@ -168,7 +168,7 @@ var Playlists = {
         
         $('.op-link-pl-del').unbind();
         $('.op-link-pl-del').click(function() {
-            if ( confirm('Уверен что хочешь удалить плейлист?') ) {
+            if ( confirm( Lang.__('Sure you want delete playlist?') ) ) {
                 var id = $(this).data('id');
                 
                 $(this).parents('.op-playlist').remove();
@@ -209,7 +209,7 @@ var Playlists = {
         
         $('#opLinkNewPlaylist').unbind();
         $('#opLinkNewPlaylist').click(function() {
-            var name = prompt('Введи имя для нового плейлиста', 'Новый плейлист');
+            var name = prompt( Lang.__('Input new playlist name'), Lang.__('New playlist') );
 
             if ( name && name.trim() ) {
                 Loading.on();
@@ -228,7 +228,7 @@ var Playlists = {
                         if ( data.status ) {
                             Playlists.reload();
                         } else {
-                            alert('Что-то пошло не так, попробуй еще раз.');
+                            alert( Lang.__('Something went wrong:(') );
                             Loading.off();
                         }
                     }
@@ -424,7 +424,7 @@ var Playlists = {
                     $("#song-title").html(title);
                     $("title").html(title);
                 } else {
-                    alert("Что-то пошло не так:(");
+                    alert( Lang.__('Something went wrong:(') );
                 }
                 
                 Loading.off();

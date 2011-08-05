@@ -1,6 +1,6 @@
 <?php if (count($this->recommendations)): ?>
 
-    Похожие исполнители: 
+    <?php echo __('Similiar artists') ?>: 
     <?php $atrs = array() ?>
     <?php foreach($this->recommendations as $art => $cnt): ?>
         <?php $atrs[] = '<a href="javascript:void(0)" class="op-atrist">'.htmlspecialchars(trim($art)).'</a>'; ?>

@@ -4,6 +4,6 @@
             <?php $h[] = '<a class="op-atrist" href="javascript:void(0)">'.$item.'</a>'?>
         <?php endforeach; ?>
 
-        Последние поиски: <?php echo join(', ', array_reverse($h)) ?>
+        <?php echo __('Last searches') ?>: <?php echo join(', ', array_reverse($h)) ?>
     </div>
 <?php endif ?>

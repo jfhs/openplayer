@@ -2,7 +2,7 @@
 <?php echo $this->render('recommendation') ?>
 
 <?php if ( !count($this->songs) ): ?>
-    Ничего не найдено.
+    <?php echo __('Nothing found') ?>
 <?php else: ?>
     <?php foreach ($this->songs as $song): ?>
         <?php $path = $song['url'] ?>

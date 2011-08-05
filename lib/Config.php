@@ -30,10 +30,10 @@ class Config {
         }
     }
     
-    public function getOption( $section, $key ) {
-        if ( !isset( $this->config[$section] ) ) return null;
+    public function getOption( $section, $key, $default = null ) {
+        if ( !isset( $this->config[$section] ) ) return $default;
         
-        if ( !isset( $this->config[$section][$key] ) ) return null;
+        if ( !isset( $this->config[$section][$key] ) ) return $default;
             
         return $this->config[$section][$key];
     }

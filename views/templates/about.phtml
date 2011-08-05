@@ -1,82 +1,70 @@
-<strong>Основные возможности плеера</strong>
+<strong><?php echo __('Basic player features') ?></strong>
 <ul>
     <li>
-        <strong>Поиск.</strong> Поиск ведется через вконтакте, соответственно всю музыку которую
-        можно найти вконтакте, можно найти и здесь.
+        <strong><?php echo __('Search') ?>.</strong> <?php echo __('Search using vkontakte music database.') ?>
     </li>
     <li>
-        <strong>Простая авторизация.</strong> Авторизация необязательная и нужна только для 
-        доступа к своим плейлистам. Логин и регистрация не разъеденины, то есть
-        во время авторизации проверяется наличия пользователя в базе, если такого
-        нет - он создается. Пароль иметь необязательно.
+        <strong><?php echo __('Simple authorisation') ?>.</strong> <?php echo __('Authorisation is optional, and needed only to access your playlists. Login and Registration not separated, so you can login by <b>any</b> login or login and password you want. Password is also optional.') ?>
     </li>
     <li>
-        <strong>Плейлисты.</strong> Плейлисты доступны только авторизированным на сайте 
-        пользователям. Нужны они для группирования вашей музыки.
+        <strong><?php echo __('Playlists') ?>.</strong> <?php echo __('Playlists available only for authorised users. It needs to group your music.') ?>
     </li>
     <li>
-        <strong>Drag & Drop.</strong> Удобное управление плеером через drag & drop.
+        <strong><?php echo __('Drag & Drop') ?>.</strong> <?php echo __('Useful controll player using Drag&Drop.') ?>
     </li>
     <li>
-        <strong>Социальная интеграция.</strong> Можно поделиться понравившемся (или не понравившемся)
-        треком с друзями вконтакте, фейсбуке и твиттере.
+        <strong><?php echo __('Social integration') ?>.</strong> <?php echo __('Share music with friends in vkontakte, facebook & twitter.') ?>
     </li>
     <li>
-        <strong>Ссылка на трек.</strong> Также поделиться треком можно просто скопировав ссылку 
-        на него и отправив её любым доступным путём (jabber, <s>icq</s>, email).
+        <strong><?php echo __('Link on track') ?>.</strong> <?php echo __('Also you can share direct link to music with your friend in jabber, skype, icq or in any other way.') ?>
     </li>
     <li>
-        <strong>Рекомендации.</strong> На основе прослушанной пользователями музыки формируется 
-        база рекомендаций, которая подскажет что еще можно послушать.
+        <strong><?php echo __('Recommendations') ?>.</strong> <?php echo __('Recommendations is based on listened music database.') ?> 
+    </li>
+    <li>
+        <strong><?php echo __('Saerch history') ?>.</strong> <?php echo __('Your search history.') ?> 
     </li>
 </ul>
 
-<strong>Так в чем же преимущества<!-- перед простоплеером:) -->?</strong>
+<strong><?php echo __('And what are the advantages?') ?></strong>
 <ul>
-        <li>
-        <strong>Децентрализация.</strong> Open Player каждый может установить на свой 
-        LAMP-хостинг со всей музыкой и без каких либо ограничений 
-        со стороны плеера.
+    <li>
+        <strong><?php echo __('Decentralisation') ?>.</strong> <?php echo __('Open Player everybody can setup on his own LAMP-hosting.') ?> 
     </li>
     <li>
-        <strong>Бесплатный и открытый.</strong> Проект польностью бесплатный
-        как для пользователей так и для тех, кто хочет его установить себе. 
-        Распространяется "как есть". При необходимости его легко 
-        модифицировать под себя.
+        <strong><?php echo __('Free and opensource') ?>.</strong> <?php echo __('This project is opensource, and spread "as is", so everybody can modify it.') ?>
     </li>
 </ul>
 
-<strong>Поддерживаемые браузеры</strong>
+<strong><?php echo __('Supported browsers') ?></strong>
 <ul>
     <li>
-        К сожалению, эта версия плеера может некорректно работать в некоторых браузерах.
-        Тестирование проводилось в браузерах Firefox4+, новые версии Google Chrome.
-        <!-- С IE конечно все печально -->
+        <?php echo __('Unfortunately this version can work incorrect in some browsers. It must good work in Firefox 4+ and Google Chrome.') ?>
     </li>
 </ul>
     
-<strong>Хочу себе такой же, как мне это сделать?</strong>
+<strong><?php echo __('How to setup it on your own hosting?') ?></strong>
 <ul>
     <li>
-        Инструкция по установке плеера на свой хостинг находится на 
-        <a class="op-underline" target="_blank" href="http://bonart.org.ua/page/openplayer">странице проекта</a>.
+        <?php echo __('Install instructions is located on') ?>
+        <a class="op-underline" target="_blank" href="http://bonart.org.ua/page/openplayer"><?php echo __('project page') ?></a>.
     </li>
 </ul>
 
-<strong>Вопросы, проблемы, предложения, пожелания, etc? </strong>
+<strong><?php echo __('Have questions?') ?></strong>
 <ul>
     <li>
-        <a target="_blank" title="Новости проекта в твиттере" class="op-underline" href="http://twitter.com/openwebplayer">Новости проекта в твиттере</a>
+        <a target="_blank" title="<?php echo __('Project news in twitter') ?>" class="op-underline" href="http://twitter.com/openwebplayer"><?php echo __('Project news in twitter') ?></a>
     </li>
     <li>
-        <a target="_blank" title="Обсуждение на гугл плюс" class="op-underline" href="https://plus.google.com/u/1/100300191451326989757/posts/UDvzX4jkDbG">Обсуждение на гугл плюс</a>
+        <a target="_blank" title="<?php echo __('Discussion on google plus') ?>" class="op-underline" href="https://plus.google.com/u/1/100300191451326989757/posts/UDvzX4jkDbG"><?php echo __('Discussion on google plus') ?></a>
     </li>
     <li>
-        <a target="_blank" title="Группа проекта вконтакте" class="op-underline" href="http://vk.com/openwebplayer">Группа проекта вконтакте</a>
+        <a target="_blank" title="<?php echo __('Vkontakte project group') ?>" class="op-underline" href="http://vk.com/openwebplayer"><?php echo __('Vkontakte project group') ?></a>
     </li>
     <li>
-        <a target="_blank" title="Группа проекта фейсбук" class="op-underline" href="http://facebook.com/groups/145224552223981">Группа проекта фейсбук</a>
+        <a target="_blank" title="<?php echo __('Facebook project group') ?>" class="op-underline" href="http://facebook.com/groups/145224552223981"><?php echo __('Facebook project group') ?></a>
     </li>
 </ul>
 
-<!-- v0.1 -->
+<!-- v0.12 -->

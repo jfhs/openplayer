@@ -1,14 +1,13 @@
-<div id="opDialogLogin" class="op-hide" title="Форма авторизации">
+<div id="opDialogLogin" class="op-hide" title="<?php echo __('Auth form') ?>">
     <div>
-        Регистрироваться не обязательно, просто введи желаемый логин или 
-        логин и пароль и система авторизирует тебя под ним.
+        <?php echo __('Registration is optional, just input login or login and password and system authorise you with it') ?>.
     </div>
     
     <form method="post">
         <table class="op-table op-w100">
             <tr>
                 <th>
-                    Логин *
+                    <?php echo __('Login') ?>*
                 </th>
                 <td>
                     <input type="text" name="login" value="" class="op-w100"/>
@@ -16,7 +15,7 @@
             </tr>
             <tr>
                 <th>
-                    Пароль
+                    <?php echo __('Password') ?>
                 </th>
                 <td>
                     <input type="password" name="password" value="" class="op-w100"/>
@@ -25,7 +24,7 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <input type="submit" value="Авторизация" />
+                    <input type="submit" value="<?php echo __('Authorise') ?>" />
                 </td>
             </tr>
         </table>

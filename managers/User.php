@@ -6,7 +6,7 @@ class User extends \Lib\Base\Manager {
 	const SESS_KEY = 'user';
 
 	public static function getUser() {
-		if ( !isset($_SESSION[ User::SESS_NS ]) ) {
+		if ( !isset($_SESSION[ User::SESS_NS ][ User::SESS_KEY ]) ) {
 			return false;
 		}
 		
@@ -35,6 +35,7 @@ class User extends \Lib\Base\Manager {
 
 
     public function updatePLSettings ( $plId, $status ) {
+        $user = User::getUser();
 		$plId = intval($plId);
 		$status = 1*$status;
 
@@ -99,6 +100,8 @@ class User extends \Lib\Base\Manager {
 		$user->settings = (array) json_decode($user->settings);
 		@$user->settings['pl'] = (array) $user->settings['pl'];
 		
+        $_SESSION[ User::SESS_NS ]['lang'] = $user->settings['lang'];
+        
 		return $_SESSION[ User::SESS_NS ][ User::SESS_KEY ] = $user;
 	}
 	
@@ -115,8 +118,12 @@ class User extends \Lib\Base\Manager {
 
 
 	public function logout() {
-		unset($_SESSION[ User::SESS_NS ]);
+        $lang = $_SESSION[ User::SESS_NS ][ 'lang' ];
+		
+        unset($_SESSION[ User::SESS_NS ]);
 		setcookie('sessionKey', null, time() , '/');
+        
+        $_SESSION[ User::SESS_NS ][ 'lang' ] = $lang;
 	}
 	
 	public function autologin() {

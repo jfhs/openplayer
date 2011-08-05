@@ -28,10 +28,19 @@
             }
             
             var Settings = <?php echo json_encode(\Lib\Config::getInstance()->getOptions('client'))?>;
+            var Lang = {
+                __: function( word ) {
+                    return ( this.translate[word] )
+                        ? this.translate[word]
+                        : word;
+                },
+                
+                translate: <?php echo json_encode(Lib\Lang::$translate)?>
+            }
+                    
         </script>
         
         <?php echo $this->content ?>
-        
         
         <?php if (\Lib\Config::getInstance()->getOption('app', 'GoogleAnalytics')): ?>
             <script type="text/javascript">

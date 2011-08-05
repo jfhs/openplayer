@@ -9,11 +9,11 @@
 
     <?php if ( !\Lib\Request::get('l') ): ?> 
         <?php if ( $offset ): ?> 
-            <a id="opPagerSongsPrev" href="?q=<?php echo urlencode($q) ?><?php /*&offset=<?php echo ($offset - $songsCount) */?>">&laquo; Предыдущие</a>
+            <a id="opPagerSongsPrev" href="?q=<?php echo urlencode($q)?>&offset=<?php echo ($offset - $songsCount) ?>">&laquo; <?php echo __('Previous') ?></a>
         <?php endif ?>
         
-        <?php if (count($this->songs) >= $songsCount): ?>
-            <a id="opPagerSongsNext" href="?q=<?php echo urlencode($q) ?>&offset=<?php echo ($offset + $songsCount) ?>">Следующие &raquo;</a>
+        <?php if ( count($this->songs) >= $songsCount ): ?>
+            <a id="opPagerSongsNext" href="?q=<?php echo urlencode($q) ?>&offset=<?php echo ($offset + $songsCount) ?>"><?php echo __('Next') ?> &raquo;</a>
         <?php endif ?>
     <?php endif ?>
 <?php else: ?>

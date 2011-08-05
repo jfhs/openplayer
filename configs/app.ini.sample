@@ -35,6 +35,13 @@ GoogleAnalytics = "XX-XXXXXXXX-X"
 ; Allow to download tracks
 allow_download = true 
 
+;default language
+defLang = "ru"
+; available languages
+availableLangs[] = "ru"
+availableLangs[] = "ua"
+availableLangs[] = "en"
+
 
 [storage]
 ; Directory levels
