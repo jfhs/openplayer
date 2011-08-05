@@ -308,7 +308,9 @@ var Playlists = {
     
     getFirstSong: function() {
 //        $(this.prevSong.parents(".op-container-songbox").children().get(0));
-        return $(".op-container-songbox").children('.op-song').get(0);
+    	//используем родителей предыдущей песни для того чтобы повторять
+    	//тот плейлист который проигрывался, а не прыгать из плейлиста в поиск
+        return this.prevSong.parents(".op-container-songbox").children('.op-song').get(0);
     },
     
     next: function() {
